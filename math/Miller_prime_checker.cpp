@@ -12,8 +12,7 @@ namespace check_prime {
         return ((x * y - (ll)(((ldb)x * y + 0.5) / mod) * mod) % mod + mod) % mod;
     }
 
-
-    inline ll kissme(ll x, ll y, const ll &mod) {
+    inline ll powMod(ll x, ll y, const ll &mod) {
         ll r = 1;
         for (; y; y >>= 1, x = multiply(x, x, mod)) {
             if (y & 1) {
@@ -37,7 +36,7 @@ namespace check_prime {
         int t = 0;
         for (; !(u & 1); u >>= 1, ++t);
         for (int i = 0; i < 10; ++i) {
-            a = rand_ll() % (n - 1) + 1, x = kissme(a, u, n);
+            a = rand_ll() % (n - 1) + 1, x = powMod(a, u, n);
             for (int j = 0; j < t; ++j, x = y) {
                 if ((y = multiply(x, x, n)) == 1 && x != 1 && x != n - 1) {
                     return false;
