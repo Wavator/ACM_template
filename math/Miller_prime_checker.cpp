@@ -22,11 +22,11 @@ namespace check_prime {
         }
         return r;
     }
-    inline long long RandLL() {
+    inline long long rand_ll() {
         return (ll) rand() << 30 | rand();
     }
 
-    inline bool MillerRabin(ll n) {
+    inline bool check(ll n) {
         if (n == 2) {
             return true;
         }
@@ -37,7 +37,7 @@ namespace check_prime {
         int t = 0;
         for (; !(u & 1); u >>= 1, ++t);
         for (int i = 0; i < 10; ++i) {
-            a = RandLL() % (n - 1) + 1, x = kissme(a, u, n);
+            a = rand_ll() % (n - 1) + 1, x = kissme(a, u, n);
             for (int j = 0; j < t; ++j, x = y) {
                 if ((y = multiply(x, x, n)) == 1 && x != 1 && x != n - 1) {
                     return false;
