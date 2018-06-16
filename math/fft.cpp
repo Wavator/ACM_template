@@ -1,4 +1,9 @@
+#include <bits/stdc++.h>
+using namespace std;
 namespace fft {
+
+    typedef long long type;
+
     typedef double db;
 
     struct cp {
@@ -12,24 +17,24 @@ namespace fft {
     inline cp operator*(cp a, cp b) { return cp(a.x * b.x - a.y * b.y, a.x * b.y + a.y * b.x); }
     inline cp conj(cp a) { return cp(a.x, -a.y); }
 
-    int base = 1;
+    type base = 1;
     vector<cp> roots = {{0, 0}, {1, 0}};
-    vector<int> rev = {0, 1};
+    vector<type> rev = {0, 1};
 
     const db PI = acosl(-1.0);
 
-    void ensure_base(int nbase) {
+    void ensure_base(type nbase) {
         if (nbase <= base) {
             return;
         }
         rev.resize(static_cast<unsigned long>(1 << nbase));
-        for (int i = 0; i < (1 << nbase); i++) {
+        for (type i = 0; i < (1 << nbase); i++) {
             rev[i] = (rev[i >> 1] >> 1) + ((i & 1) << (nbase - 1));
         }
         roots.resize(static_cast<unsigned long>(1 << nbase));
         while (base < nbase) {
             db angle = 2 * PI / (1 << (base + 1));
-            for (int i = 1 << (base - 1); i < (1 << base); i++) {
+            for (type i = 1 << (base - 1); i < (1 << base); i++) {
                 roots[i << 1] = roots[i];
                 db angle_i = angle * (2 * i + 1 - (1 << base));
                 roots[(i << 1) + 1] = cp(cos(angle_i), sin(angle_i));
@@ -38,22 +43,22 @@ namespace fft {
         }
     }
 
-    void fft(vector<cp> &a, int n = -1) {
+    void fft(vector<cp> &a, type n = -1) {
         if (n == -1) {
             n = a.size();
         }
         assert((n & (n - 1)) == 0);
-        int zeros = __builtin_ctz(n);
+        type zeros = __builtin_ctz(n);
         ensure_base(zeros);
-        int shift = base - zeros;
-        for (int i = 0; i < n; i++) {
+        type shift = base - zeros;
+        for (type i = 0; i < n; i++) {
             if (i < (rev[i] >> shift)) {
                 swap(a[i], a[rev[i] >> shift]);
             }
         }
-        for (int k = 1; k < n; k <<= 1) {
-            for (int i = 0; i < n; i += 2 * k) {
-                for (int j = 0; j < k; j++) {
+        for (type k = 1; k < n; k <<= 1) {
+            for (type i = 0; i < n; i += 2 * k) {
+                for (type j = 0; j < k; j++) {
                     cp z = a[i + j + k] * roots[j + k];
                     a[i + j + k] = a[i + j] - z;
                     a[i + j] = a[i + j] + z;
@@ -64,23 +69,23 @@ namespace fft {
 
     vector<cp> fa, fb;
 
-    vector<int> multiply(vector<int> &a, vector<int> &b) {
-        int need = a.size() + b.size() - 1;
-        int nbase = 0;
+    vector<type> multiply(vector<type> &a, vector<type> &b) {
+        type need = a.size() + b.size() - 1;
+        type nbase = 0;
         while ((1 << nbase) < need) nbase++;
         ensure_base(nbase);
-        int sz = 1 << nbase;
-        if (sz > (int) fa.size())
+        type sz = 1 << nbase;
+        if (sz > (type) fa.size())
             fa.resize(static_cast<unsigned long>(sz));
-        for (int i = 0; i < sz; i++) {
-            int x = (i < (int) a.size() ? a[i] : 0);
-            int y = (i < (int) b.size() ? b[i] : 0);
+        for (type i = 0; i < sz; i++) {
+            type x = (i < (type) a.size() ? a[i] : 0);
+            type y = (i < (type) b.size() ? b[i] : 0);
             fa[i] = cp(x, y);
         }
         fft(fa, sz);
         cp r(0, -0.25 / sz);
-        for (int i = 0; i <= (sz >> 1); i++) {
-            int j = (sz - i) & (sz - 1);
+        for (type i = 0; i <= (sz >> 1); i++) {
+            type j = (sz - i) & (sz - 1);
             cp z = (fa[j] * fa[j] - conj(fa[i] * fa[i])) * r;
             if (i != j) {
                 fa[j] = (fa[i] * fa[i] - conj(fa[j] * fa[j])) * r;
@@ -88,36 +93,36 @@ namespace fft {
             fa[i] = z;
         }
         fft(fa, sz);
-        vector<int> res(static_cast<unsigned long>(need));
-        for (int i = 0; i < need; i++) {
+        vector<type> res(static_cast<unsigned long>(need));
+        for (type i = 0; i < need; i++) {
             res[i] = fa[i].x + 0.5;
         }
         return res;
     }
 
-    vector<int> multiply_mod(vector<int> &a, vector<int> &b, int m, int eq = 0) {
-        int need = a.size() + b.size() - 1;
-        int nbase = 0;
+    vector<type> multiply_mod(vector<type> &a, vector<type> &b, type m, type eq = 0) {
+        type need = a.size() + b.size() - 1;
+        type nbase = 0;
         while ((1 << nbase) < need) nbase++;
         ensure_base(nbase);
-        int sz = 1 << nbase;
-        if (sz > (int) fa.size()) {
+        type sz = 1 << nbase;
+        if (sz > (type) fa.size()) {
             fa.resize(static_cast<unsigned long>(sz));
         }
-        for (int i = 0; i < (int) a.size(); i++) {
-            int x = (a[i] % m + m) % m;
+        for (type i = 0; i < (type) a.size(); i++) {
+            type x = (a[i] % m + m) % m;
             fa[i] = cp(x & ((1 << 15) - 1), x >> 15);
         }
         fill(fa.begin() + a.size(), fa.begin() + sz, cp {0, 0});
         fft(fa, sz);
-        if (sz > (int) fb.size()) {
+        if (sz > (type) fb.size()) {
             fb.resize(static_cast<unsigned long>(sz));
         }
         if (eq) {
             copy(fa.begin(), fa.begin() + sz, fb.begin());
         } else {
-            for (int i = 0; i < (int) b.size(); i++) {
-                int x = (b[i] % m + m) % m;
+            for (type i = 0; i < (type) b.size(); i++) {
+                type x = (b[i] % m + m) % m;
                 fb[i] = cp(x & ((1 << 15) - 1), x >> 15);
             }
             fill(fb.begin() + b.size(), fb.begin() + sz, cp {0, 0});
@@ -128,8 +133,8 @@ namespace fft {
         cp r3(ratio, 0);
         cp r4(0, -ratio);
         cp r5(0, 1);
-        for (int i = 0; i <= (sz >> 1); i++) {
-            int j = (sz - i) & (sz - 1);
+        for (type i = 0; i <= (sz >> 1); i++) {
+            type j = (sz - i) & (sz - 1);
             cp a1 = (fa[i] + conj(fa[j]));
             cp a2 = (fa[i] - conj(fa[j])) * r2;
             cp b1 = (fb[i] + conj(fb[j])) * r3;
@@ -147,8 +152,8 @@ namespace fft {
         }
         fft(fa, sz);
         fft(fb, sz);
-        vector<int> res(static_cast<unsigned long>(need));
-        for (int i = 0; i < need; i++) {
+        vector<type> res(static_cast<unsigned long>(need));
+        for (type i = 0; i < need; i++) {
             long long aa = fa[i].x + 0.5;
             long long bb = fb[i].x + 0.5;
             long long cc = fa[i].y + 0.5;
@@ -157,7 +162,7 @@ namespace fft {
         return res;
     }
 
-    vector<int> square_mod(vector<int> &a, int m) {
+    vector<type> square_mod(vector<type> &a, type m) {
         return multiply_mod(a, a, m, 1);
     }
 };
