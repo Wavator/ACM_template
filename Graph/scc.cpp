@@ -1,11 +1,11 @@
 const int N = 100005;
-vector<int> e[N];
+vector<int> G[N];
 int dfn[N], lower_link[N], scc_no[N], scc_cnt, clk;
 stack<int> stk;
 void dfs(int u){
     dfn[u] = lower_link[u] = ++clk;
     stk.push(u);
-    for (auto &v: e[u]){
+    for (auto &v: G[u]){
         if (!dfn[v]) {
             dfs(v);
             lower_link[u] = min(lower_link[u], lower_link[v]);

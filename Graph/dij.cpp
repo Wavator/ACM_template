@@ -1,5 +1,5 @@
 const int N = 100005;
-void Dijkstra(int s, int n, long long * dis, const vector<pair<int, long long> > e[]) {
+void Dijkstra(int s, int n, long long * dis, const vector<edge> e[]) {
     static bool vis[N];
     static const long long inf = 0x3f3f3f3f3f3f3f3fll;
     fill(dis + 1, dis + n + 1, inf);
@@ -12,9 +12,9 @@ void Dijkstra(int s, int n, long long * dis, const vector<pair<int, long long> >
         if (vis[u])
             continue;
         vis[u] = true;
-        for (auto &p: e[u]) {
-            long long c = p.second;
-            int v = p.first;
+        for (const auto &p: e[u]) {
+            long long c = p.w;
+            int v = p.v;
             if (c + dis[u] < dis[v]) {
                 dis[v] = dis[u] + c;
                 pq.emplace(-dis[v], v);

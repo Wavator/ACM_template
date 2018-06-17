@@ -1,5 +1,5 @@
 const int N = 5002;
-vector<int> e[N];
+vector<int> G[N];
 int ind[N];
 int topo[N];
 bool Topo(int n) {
@@ -11,7 +11,7 @@ bool Topo(int n) {
     }
     while (head != tail) {
         int u = topo[n--] = que[head++];
-        for (const auto &v: e[u]) {
+        for (const auto &v: G[u]) {
             ind[v]--;
             if (ind[v] == 0)
                 que[tail++] = v;

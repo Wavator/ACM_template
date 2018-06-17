@@ -1,6 +1,6 @@
 const int N = 100005;
 
-vector <int> e[N];
+vector <int> G[N];
 
 int topo[N], topo_ed[N];
 
@@ -8,7 +8,7 @@ int topo_cnt;
 
 bool topo_dfs(int u) {
     topo_ed[u] = -1;
-    for (auto &v: e[u]) {
+    for (auto &v: G[u]) {
         if (topo_ed[v] == -1)
             return false;
         if (topo_ed[v] == 0)

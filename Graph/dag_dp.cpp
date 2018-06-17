@@ -1,11 +1,11 @@
 const int N = 100005;
-vector<int> e[N];
+vector<int> G[N];
 int dfn[N], lower_link[N], scc_no[N], scc_cnt, clk, scc_sz[N];
 stack<int> stk;
 void dfs(int u){
     dfn[u] = lower_link[u] = ++clk;
     stk.push(u);
-    for (const auto &v: e[u]){
+    for (const auto &v: G[u]){
         if (!dfn[v]) {
             dfs(v);
             lower_link[u] = min(lower_link[u], lower_link[v]);
@@ -47,7 +47,7 @@ void reBuild(int n) {
         dag[i].clear();
     }
     for (int i = 1; i <= n; ++i) {
-        for (const auto&v: e[i]) {
+        for (const auto&v: G[i]) {
             if (scc_no[i] != scc_no[v]) {
                 dag[scc_no[i]].push_back(scc_no[v]);
                 ind[scc_no[v]]++;
@@ -97,4 +97,3 @@ void DP(int n) {// n = scc_cnt
     }
     printf("%d\n%d\n", ans_sz, ans_count);
 }
-
