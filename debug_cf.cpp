@@ -105,6 +105,10 @@ int main() {
     solve();
     return 0;
 }
+#define my_sort_unique(c) (sort(c.begin(), c.end()), c.resize(distance(c.begin(), unique(c.begin(), c.end()))))
+#define my_unique(a) a.resize(distance(a.begin(), unique(a.begin(), a.end())))
+#define all(x) (x).begin(), (x).end()
+#define pb push_back
 
 const db eps = 1e-9, PI = acos(-1);
 const ll mod = 1e9 + 7, LL_INF = 0x3f3f3f3f3f3f3f3f;
