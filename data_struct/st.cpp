@@ -1,41 +1,22 @@
-template <typename type>
-class ST {
-    static const int N = 100005;
-    type st[N][32];
-    type st_pre[N];
-    
-    function<type(type, type)> f;
-    
-    void init(int n, const type * arr) {
-        st_pre[1] = 0;
-        for (int i = 2; i <= n; i++) {
-            st_pre[i] = st_pre[i - 1];
-            if ((1 << st_pre[i] + 1) == i) ++st_pre[i];
-        }
-        for (int i = n - 1; i >= 0; --i) {
-            st[i][0] = arr[i];
-            for (int j = 1; (i + (1 << j) - 1) < n; ++j)
-                st[i][j] = f(st[i][j - 1], st[i + (1 << j - 1)][j - 1]);
-        }
+template <class T>
+struct RMQ {
+    vector<vector<T> > rmq;
+    // vector<T> rmq[20]; or T[100002][20] if need speed
+    //T kInf = numeric_limits<T>::max(); // if need return a value when the interval fake
+    void init(const vector<T>& a) { // 0 base
+        int n = (int)a.size(), base = 1, depth = 1;
+        while (base < n)
+            base <<= 1, ++depth;
+        rmq.assign((unsigned)depth, a);
+        for (int i = 0; i < depth - 1; ++i)
+            for (int j = 0; j < n; ++j) {
+                rmq[i + 1][j] = min(rmq[i][j],
+                                    rmq[i][min(n - 1, j + (1 << i))]);
+            }
     }
-    
-    type query(int l, int r) {
-        type len = r - l + 1, k = st_pre[len];
-        return f(st[l][k], st[r - (1 << k) + 1][k]);
+    T q(int l, int r) { // [l, r)
+        assert(r > l);
+        int dep = 31 - __builtin_clz(r - l); // log(b - a)
+        return min(rmq[dep][l], rmq[dep][r - (1 << dep)]);
     }
-    
-    
-    void init_f(bool mx) {
-        function<type(type, type)> maxf = [&](const type &x, const type &y) {
-            return max(x, y);
-        };
-        function<type(type, type)> minf = [&](const type &x, const type &y) {
-            return min(x, y);
-        };
-        if (mx)
-            f = maxf;
-        else
-            f = minf;
-    }
-    
 };
