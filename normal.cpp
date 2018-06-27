@@ -39,8 +39,24 @@ ll pow_mod(ll a, ll b) {
     return res;
 }
 /////////////////////////////////////////////////////////////////////////
+template <typename T> inline bool rd(T &x) {
+    static char c;
+    bool f = false;
+    for (c = getchar(); !isdigit(c); c = getchar()) {
+        if (c == EOF)
+            return false;
+        if (c == 45) {
+            f = true;
+        }
+    }
+    for (x = 0; isdigit(c); c = getchar())
+        x = x * 10 + c - 48;
+    if (f)
+        x = -x;
+    return true;
+}
 
 int main() {
-
+    
     return 0;
 }
