@@ -16,6 +16,7 @@ template <typename T> inline bool read(T &x) {
     if (f) {
         x = -x;
     }
+    return true;
 }
 
 #undef gc
