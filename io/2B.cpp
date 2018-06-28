@@ -1,11 +1,11 @@
 inline char gc() {
-    static char O[1<<20], *SS = O, *TT = O;
-    return (SS == TT && (TT = (SS = O) + fread(O, 1, 1 << 20, stdin), SS == TT)? -1: *SS++);
+    static char buf[1<<20], *head = buf, *tail = buf;
+    return (head == tail && (tail = (head = buf) + fread_unlocked(buf, 1, 1 << 20, stdin), head == tail)? -1: *head++);
 }
 template <typename T> inline bool read(T &x) {
-    bool f = false;
-    char c;
-    for (c = gc(); !isdigit(c); c = gc()) {
+    static bool f;
+    static char c;
+    for (c = gc(), f = false; !isdigit(c); c = gc()) {
         if (c == EOF)
             return false;
         else if (c == 45)
@@ -19,9 +19,9 @@ template <typename T> inline bool read(T &x) {
 }
 inline bool read(double &x) {
     static char c;
-    for(;(c = gc()) != '-' && !isdigit(c);)
+    static bool f;
+    for(f = false; (c = gc()) != '-' && !isdigit(c);)
         if (c == EOF) return false;
-    bool f = false;
     if (c == '-')
         x = 0, f = true;
     else
@@ -30,7 +30,7 @@ inline bool read(double &x) {
         x = x * 10 + (c & 15);
     if (c == '.') {
         double base = 1.0;
-        while (isdigit(c = gc()))
+        for (;isdigit(c = gc());)
             x += (c & 15) * (base /= 10);
     }
     if (f)
@@ -38,13 +38,13 @@ inline bool read(double &x) {
     return true;
 }
 inline bool read(char s[]) {
-    int ptr = 0;
+    static int ptr;
     static char ch;
-    for (ch = gc(); ch != ' ' && ch != '\n'; ch = gc()) {
+    for (ch = gc(), ptr = 0; ch != ' ' && ch != '\n'; ch = gc()) {
         if (ch == EOF)
             return false;
         s[ptr++] = ch;
     }
-    s[ptr] = '\0';
+    s[ptr] = 0;
     return true;
 }
