@@ -1,9 +1,9 @@
-struct edge {
-    int y;
-    edge * next;
-};
 class Graph {
 public:
+    struct edge {
+        int y;
+        edge * next;
+    };
     static const int N = ::N, M = N << 1;
     edge e[M], *li[N];
     int etop;
