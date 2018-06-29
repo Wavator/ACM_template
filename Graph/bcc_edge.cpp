@@ -1,4 +1,4 @@
-class bcc_bridge: public Graph {
+class bcc_edge: public Graph {
 public:
     int clk, dfn[N], low[N], Father[N], stk[N],top, bcc_cnt, bcc_no[N];
     void Tarjan(int u,int fa) {

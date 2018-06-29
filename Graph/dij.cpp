@@ -1,24 +1,32 @@
-const int N = 100005;
-void Dijkstra(int s, int n, long long * dis, const vector<edge> e[]) {
-    static bool vis[N];
-    static const long long inf = 0x3f3f3f3f3f3f3f3fll;
-    fill(dis + 1, dis + n + 1, inf);
-    fill(vis + 1, vis + n + 1, false);
-    priority_queue<pair<long long, int> > pq;
-    pq.emplace(dis[s] = 0, s);
-    while (!pq.empty()) {
-        int u = pq.top().second;
-        pq.pop();
-        if (vis[u])
-            continue;
-        vis[u] = true;
-        for (const auto &p: e[u]) {
-            long long c = p.w;
-            int v = p.v;
-            if (c + dis[u] < dis[v]) {
-                dis[v] = dis[u] + c;
-                pq.emplace(-dis[v], v);
+class Dij: public Graph {
+public:
+    T dis[N];
+    bool vis[N];
+    //vector<int> pre[N];
+    priority_queue<pair<T, int> > q;
+    static const T inf = 0x3f3f3f3f3f3f3f3f;
+    void dij (int st, int n) {
+        for (int i = 0; i <= n; ++i) {
+            dis[i] = inf;
+            vis[i] = false;
+        }
+        q.emplace(dis[st] = 0, st);
+        for (;!q.empty();) {
+            int u = q.top().second;
+            q.pop();
+            if (vis[u])
+                continue;
+            vis[u] = true;
+            int v;
+            for (edge * t = li[u]; t; t = t->next) {
+                v = t->y;
+                T c = t->w;
+                if (dis[v] > dis[u] + c) {
+                    dis[v] = dis[u] + c;
+                    q.emplace(-dis[v], v);
+                    //pre[v].clear(); pre[v].push_back(u);
+                }// else if (dis[v] == dis[u] + c) pre[v].push_back(u);
             }
         }
     }
-}
+};

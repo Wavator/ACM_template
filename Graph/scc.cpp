@@ -1,5 +1,12 @@
+
+class scc_dag : public Graph{
+public:
+    int ind[N], sz[N];
+};
+
 class scc_graph: public Graph {
-    int dfn[N], lower_link[N], scc_no[N], scc_cnt, clk, stk[N], top;
+public:
+    int dfn[N], lower_link[N], scc_no[N], scc_cnt, clk, stk[N], top, sz[N];
     void dfs(int u){
         dfn[u] = lower_link[u] = ++clk;
         stk[top++] = u;
@@ -17,6 +24,7 @@ class scc_graph: public Graph {
         if (lower_link[u] == dfn[u]){
             scc_cnt++;
             for (;;){
+                sz[scc_cnt]++;
                 scc_no[v = stk[--top]] = scc_cnt;
                 if (v == u)
                     break;
@@ -31,27 +39,8 @@ class scc_graph: public Graph {
             if (!dfn[i])
                 dfs(i);
     }
-    
-    vector<int> in, out;
-    
-    void cal(int n) {
-        in.assign(scc_cnt + 1, 0);
-        out.assign(scc_cnt + 1, 0);
-        int u, v, j;
-        edge * t;
-        for (int i = 1; i <= n; ++i) {
-            for (t = li[i]; t; t = t->next) {
-                j = t->y;
-                u = scc_no[i], v = scc_no[j];
-                if (u != v) {
-                    out[u]++;
-                    in[v]++;
-                }
-            }
-        }
-    }
-    
-    void rebuild(Graph &o, int n) {
+
+    void rebuild(scc_dag &o, int n) {
         int u, v, j;
         edge * t;
         for (int i = 1; i <= n; ++i) {
@@ -60,8 +49,10 @@ class scc_graph: public Graph {
                 u = scc_no[i], v = scc_no[j];
                 if (u != v) {
                     o.add_edge(u, v);
+                    o.ind[v]++;
                 }
             }
         }
+        memcpy(o.sz, sz, sizeof(o.sz));
     }
 };
