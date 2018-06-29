@@ -1,6 +1,5 @@
-class bcc_bridge:Graph {
+class bcc_bridge: public Graph {
 public:
-    using Graph::add_edges;
     int clk, dfn[N], low[N], Father[N], stk[N],top, bcc_cnt, bcc_no[N];
     void Tarjan(int u,int fa) {
         dfn[u] = low[u] = ++clk;
@@ -38,7 +37,7 @@ public:
             if(dfn[i] == 0) Tarjan(i, i);
     }
 
-    void re_build(tree &o, int n) {
+    void re_build(Graph &o, int n) {
         for(int i = 1; i <= n; i++) {
             int v = Father[i];
             if(bcc_no[i] != bcc_no[v]) {
