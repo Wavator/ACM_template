@@ -1,7 +1,7 @@
 
 class scc_dag : public Graph{
 public:
-    int ind[N], sz[N];
+    int ind[N], sz[N], od[N];
 };
 
 class scc_graph: public Graph {
@@ -50,6 +50,7 @@ public:
                 if (u != v) {
                     o.add_edge(u, v);
                     o.ind[v]++;
+                    o.od[u]++;
                 }
             }
         }
