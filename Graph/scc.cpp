@@ -1,5 +1,4 @@
-const int N = 100005;
-vector<int> G[N];
+class scc_graph: public Graph {
     int dfn[N], lower_link[N], scc_no[N], scc_cnt, clk, stk[N], top;
     void dfs(int u){
         dfn[u] = lower_link[u] = ++clk;
@@ -24,7 +23,6 @@ vector<int> G[N];
             }
         }
     }
-
     void find_scc(int n){
         clk = scc_cnt = top = 0;
         fill(scc_no + 1, scc_no + n + 1, 0);
@@ -33,3 +31,37 @@ vector<int> G[N];
             if (!dfn[i])
                 dfs(i);
     }
+    
+    vector<int> in, out;
+    
+    void cal(int n) {
+        in.assign(scc_cnt + 1, 0);
+        out.assign(scc_cnt + 1, 0);
+        int u, v, j;
+        edge * t;
+        for (int i = 1; i <= n; ++i) {
+            for (t = li[i]; t; t = t->next) {
+                j = t->y;
+                u = scc_no[i], v = scc_no[j];
+                if (u != v) {
+                    out[u]++;
+                    in[v]++;
+                }
+            }
+        }
+    }
+    
+    void rebuild(Graph &o, int n) {
+        int u, v, j;
+        edge * t;
+        for (int i = 1; i <= n; ++i) {
+            for (t = li[i]; t; t = t->next) {
+                j = t->y;
+                u = scc_no[i], v = scc_no[j];
+                if (u != v) {
+                    o.add_edge(u, v);
+                }
+            }
+        }
+    }
+};

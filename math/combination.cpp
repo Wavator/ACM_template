@@ -1,6 +1,5 @@
-namespace combination {
-    typedef long long ll;
-    ll mod = 1e9+7;
+namespace comb {
+    ll mod = (ll)1e9+7;
     vector<ll> fact, inv;
     ll powMod(ll a, ll b) {
         ll res = 1;
@@ -10,7 +9,7 @@ namespace combination {
         return res;
     }
     void init(int n, ll p = 1e9+7) {
-        combination::mod = p;
+        comb::mod = p;
         fact.resize(n+1);
         inv.resize(n+1);
         fact[0]=fact[1]=1;
