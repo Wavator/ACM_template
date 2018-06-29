@@ -1,45 +1,47 @@
-static class InputReader {
-        private BufferedReader reader;
-        private StringTokenizer tokenizer;
+import java.io.*;
+import java.util.Arrays;
+import java.util.StringTokenizer;
 
-        public InputReader(InputStream stream) {
-            reader = new BufferedReader(new InputStreamReader(stream), 32768);
-            tokenizer = null;
-        }
+public class Main {
+    private boolean oj = System.getProperty("ONLINE_JUDGE") != null;
 
-        public String next() {
-            while (tokenizer == null || !tokenizer.hasMoreTokens()) {
-                try {
-                    tokenizer = new StringTokenizer(reader.readLine());
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-            return tokenizer.nextToken();
-        }
-
-        public int nextInt() {
-            return Integer.parseInt(next());
-        }
-
-        public long nextLong() {
-            return Long.parseLong(next());
-        }
-
-        public double nextDouble() {
-            return Double.parseDouble(next());
-        }
-
-        public char[] nextCharArray() {
-            return next().toCharArray();
-        }
-
-        public BigInteger nextBigInteger() {
-            return new BigInteger(next());
-        }
-
-        public BigDecimal nextBigDecimal() {
-            return new BigDecimal(next());
-        }
-
+    void solve() {
+        
     }
+
+    private BufferedReader reader;
+    private StringTokenizer read_token;
+    private PrintWriter out;
+    void run() {
+        reader = new BufferedReader(new InputStreamReader(System.in), 32768);
+        read_token = null;
+        long st = System.currentTimeMillis();
+        solve();
+        out = new PrintWriter(System.out);
+        tr(System.currentTimeMillis() - st);
+        out.close();
+    }
+    private void tr(Object...o) {
+        if (!oj)
+            System.err.println(Arrays.deepToString(o));
+    }
+    String ns() {
+        while (read_token == null || !read_token.hasMoreTokens()) {
+            try {
+                read_token = new StringTokenizer(reader.readLine());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return read_token.nextToken();
+    }
+    int ni() {
+            return Integer.parseInt(ns());
+        }
+    long nl() {
+            return Long.parseLong(ns());
+        }
+    public static void main(String[] args) {
+        new Main().run();
+    }
+}
