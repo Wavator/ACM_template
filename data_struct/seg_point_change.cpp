@@ -1,59 +1,51 @@
-
-template <typename type>
 class segTree {
 public:
-    function<type(type, type)> f = [&](const type &a, const type &b) {
-        return a + b;
+    typedef long long T;
+    T s[N << 2];
+    typedef function<inline T (const T&, const T&)> fun;
+    fun modi = [&](const T &i, const T &j){
+        return i + j;
     };
-
-    segTree(function<type(type, type)> f):f(f){}
-    
-    segTree(){}
-    
-    vector<type> a;
-    int n;
-    void init(int n) {
-        this->n = n;
-        a.resize(static_cast<unsigned int>(n << 2 | 1));
+    fun f = [&](const T &i, const T &j) {
+        return i + j;
+    };
+    void changemodi(const fun &Modi) {
+        modi = Modi;
+    }
+    void changeup(const fun &F) {
+        f = F;
     }
     inline void push_up(int rt) {
-        a[rt] = f(a[rt << 1], a[rt << 1 | 1]);
+        s[rt] = f(s[rt << 1], s[rt << 1 | 1]);
     }
-    void build(int l, int r, int rt, type * in) {
+    int n;
+    void init(int n){this->n = n;}
+    void build(int l, int r, int rt, T * x) {
         if (l == r) {
-            a[rt] = in[l];
+            s[rt] = s[l];
             return;
         }
-        int mid = l + r >> 1;
-        build(l, mid, rt << 1, in);
-        build(mid + 1, r, rt << 1 | 1, in);
+        int mid=(l+r)>>1;
+        build(l,mid,rt<<1,x);
+        build(mid+1,r,rt<<1|1,x);
         push_up(rt);
     }
-
-    void build(type*in){
-        build(1, n, 1, in);
-    }
-
-    void change(int pos, type x, int l, int r, int rt, const function<type(type, type)> &ff = f) {
+    void build(T * x){build(1, n, 1, x);}
+    void change(int pos, T val, int l, int r, int rt) {
         if (l == r) {
-            a[rt] = ff(a[rt], x);
+            s[rt] = modi(s[rt], val);
             return;
         }
         int mid = l + r >> 1;
         if (pos <= mid)
-            change(pos, x, l, mid, rt << 1, ff);
+            change(pos, val, l, mid, rt << 1);
         else
-            change(pos, x, mid + 1, r, rt << 1 | 1, ff);
+            change(pos, val, mid + 1, r, rt << 1 | 1);
         push_up(rt);
     }
-
-    inline void change(int pos, type x, const function<type(type, type)> ff = f) {
-        change(pos, x, 1, n, 1, ff);
-    }
-
-    type query(int L, int R, int l, int r, int rt) {
+    T query(int L, int R, int l, int r, int rt) {
         if (l >= L && r <= R)
-            return a[rt];
+            return s[rt];
         int mid = l + r >> 1;
         if (L > mid)
             return query(L, R, mid + 1, r, rt << 1 | 1);
@@ -62,10 +54,7 @@ public:
         return f(query(L, R, l, mid, rt << 1), query(L, R, mid + 1, r, rt << 1 | 1));
     }
 
-    inline type query(int L, int R) {
+    inline T query(int L, int R) {
         return query(L, R, 1, n, 1);
     }
-
 };
-
-
