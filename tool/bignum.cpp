@@ -6,7 +6,7 @@ public:
     static const int MAXN = 9999;
     static const int MAXSIZE = 10;
     static const int DLEN = 4;
-    int a[500];    //可以控制大数的位数
+    int a[105];    //可以控制大数的位数
     int len;       //大数长度
     BigNum(){ len = 1;memset(a,0,sizeof(a)); }   //构造函数
     BigNum(const int);       //将一个int类型的变量转化为大数
@@ -25,8 +25,8 @@ public:
     bool   operator>(const int & t)const;      //大数和一个int类型的变量的大小比较
 
     void print();       //输出大数
-    
-    istream&operator >>(istream&in, BigNum &b) {
+
+    friend istream&operator >>(istream&in, BigNum &b) {
         char ch[MAXSIZE*4];
         int i = -1;
         in>>ch;
@@ -46,15 +46,15 @@ public:
         b.len =count++;
         return in;
     }
-    ostream& operator<<(ostream& out,  BigNum& b)   //重载输出运算符
+    friend ostream& operator<<(ostream& out,  BigNum& b)   //重载输出运算符
     {
         int i;
-        cout << b.a[b.len - 1];
+        out << b.a[b.len - 1];
         for(i = b.len - 2 ; i >= 0 ; i--)
         {
-            cout.width(DLEN);
-            cout.fill('0');
-            cout << b.a[i];
+            out.width(DLEN);
+            out.fill('0');
+            out << b.a[i];
         }
         return out;
     }
@@ -287,4 +287,3 @@ void BigNum::print()    //输出大数
     }
     cout << endl;
 }
-

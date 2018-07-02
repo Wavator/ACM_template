@@ -16,7 +16,7 @@ bool mst(Graph &o, const vector<pair<int, pair<int, int> > > &e, int n) {
     return false;
 }
 
-bool mst(const vector<pair<int, pair<int, int> > > &e, int n, long long &ans) {
+bool mst(vector<pair<int, pair<int, int> > > &e, int n, long long &ans) {
     sort(e.begin(), e.end());
     static DSU dsu;
     dsu.init(n);
