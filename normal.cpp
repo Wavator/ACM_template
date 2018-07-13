@@ -6,7 +6,7 @@ inline ostream& operator << (ostream&os, const pair<A, B> &v) {
 }
 template <typename T>
 inline ostream& operator << (ostream&os, const vector<T> &v) {
-    auto it = v.begin(); os << *it; for (++it; it != v.end(); ++it) os << ' ' << *it;
+    for (auto it = v.begin(); it != v.end(); os << (*it++)) if (it != v.cbegin()) os << ' ';
     return os;
 }
 #ifdef Wavator
