@@ -1,6 +1,6 @@
 inline char gc() {
     static char buf[1<<20], *head = buf, *tail = buf;
-    return (head == tail && (tail = (head = buf) + fread_unlocked(buf, 1, 1 << 20, stdin), head == tail)? -1: *head++);
+    return (head == tail && (tail = (head = buf) + fread(buf, 1, 1 << 20, stdin), head == tail)? -1: *head++);
 }
 template <typename T> inline bool read(T &x) {
     static bool f;
