@@ -29,18 +29,19 @@ public:
         print(x), pc(' ');
     }
     inline void flush() {
-        fwrite(buf, 1, OUT_LEN, stdout), oh = buf;
+        fwrite(obuf, 1, OUT_LEN, stdout), oh = obuf;
         fflush(stdout);
+    }
+    ~print_writer() {
+        fwrite(obuf, 1, oh - obuf, stdout);
     }
 private:
     static const int OUT_LEN = 1<<20;
-    static char buf[OUT_LEN], *oh = buf;
+    char obuf[OUT_LEN], *oh = obuf;
     inline void pc(char c) {
-        if (oh == buf + OUT_LEN)
-            fwrite(buf, 1, OUT_LEN, stdout), oh = buf;
+        if (oh == obuf + OUT_LEN)
+            fwrite(obuf, 1, OUT_LEN, stdout), oh = obuf;
         *oh++ = c;
     }
-    ~print_writer() {
-        fwrite(buf, 1, oh - buf, stdout);
-    }
+
 }out;
