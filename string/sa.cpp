@@ -1,57 +1,74 @@
 class SA {
 public:
-    static const int N = 40000 + 500;
-    int t1[N],t2[N],c[N],sa[N],rk[N],h[N];
+    static const int N = 301000;
+    int t1[N],t2[N],c[N],sa[N],rk[N],ht[N];
     char s[N];
-    int n,m;
-    
-    void init(char * s) {
-        memcpy(this->s, s, sizeof(this->s));
-        init();
+    int len,m;
+
+    SA(){}
+
+    void init(const char * b, int n){
+        len = n;
+        //cerr << len << endl;
+        rep(i, 0, n) s[i] = b[i];
     }
-    
-    void init() {
-        n=strlen(s);
-        for(int i=0;i<n;++i)
-            s[i] = s[i]-'a' + 1;
-        m=27;
-        n++;
-        int i,j,p,*x=t1,*y=t2;
-        for(i=0;i<m;i++)c[i]=0;
-        for(i=0;i<n;i++)c[x[i]=s[i]]++;
-        for(i=1;i<m;i++)c[i]+=c[i-1];
-        for(i=n-1;i>=0;i--)sa[--c[x[i]]]=i;
-        for(j=1;j<=n;j<<=1) {
-            p=0;
-            for(i=n-j;i<n;i++)y[p++]=i;
-            for(i=0;i<n;i++)if(sa[i]>=j)y[p++]=sa[i]-j;
-            for(i=0;i<m;i++)c[i]=0;
-            for(i=0;i<n;i++)c[x[y[i]]]++;
-            for(i=1;i<m;i++)c[i]+=c[i-1];
-            for(i=n-1;i>=0;i--)sa[--c[x[y[i]]]]=y[i];
-            swap(x,y);
-            p=1;x[sa[0]]=0;
-            for (i = 1; i < n; ++i) {
-                x[sa[i]] = y[sa[i - 1]] == y[sa[i]] && y[sa[i - 1] + j] == y[sa[i] + j]? p - 1:p++;
+
+    void init(const char * b) {
+        len = strlen(b);
+        rep(i, 0, len) s[i] = b[i];
+    }
+
+    void init(const string &s) {
+        int n = s.size();
+        for (len = 0; len < n; ++len) this->s[len] = s[len];
+    }
+
+    void build() {
+        int i, j, k, *x = t1, *y = t2;
+        m = 256;
+        memset(c, 0, m * sizeof(int));
+        for(i = 0; i < len; ++i)
+            ++c[x[i] = s[i]];
+        for(i = 1; i < m; ++i)
+            c[i] += c[i - 1];
+        for(i = len - 1; i >= 0; --i)
+            sa[--c[x[i]]] = i;
+        for(k = 1; k <= len; k <<= 1, m = j) {
+            j = 0;
+            for(i = len - k; i < len; ++i)
+                y[j++] = i;
+            for(i = 0; i < len; ++i)
+                if(sa[i] >= k)
+                    y[j++] = sa[i] - k;
+            memset(c, 0, m * sizeof(int));
+            for(i = 0; i < len; ++i)
+                ++c[x[y[i]]];
+            for(i = 0; i < m; ++i)
+                c[i] += c[i - 1];
+            for(i = len - 1; i >= 0; --i)
+                sa[--c[x[y[i]]]] = y[i];
+            swap(x, y);
+            j = 1;
+            x[sa[0]] = 0;
+            for(i = 1; i < len; ++i)
+                x[sa[i]] = y[sa[i - 1]] == y[sa[i]] && y[sa[i - 1] + k] == y[sa[i] + k] ? j - 1 : j++;
+            x[len] = j;
+            if(j >= len)
+                break;
+        }
+        for(i = 0; i < len; ++i)
+            rk[sa[i]] = i;
+        for(i = k = 0; i < len; ++i) {
+            if(k) --k;
+            if(!rk[i]) {
+                ht[rk[i]] = 0;
+                continue;
             }
-            if(p>=n)break;
-            m=p;
+            for(j = sa[rk[i] - 1]; s[i + k] == s[j + k]; ++k);
+            ht[rk[i]] = k;
         }
-        n--;
-        
-        
-        
-        // if get height and rank
-        int k = 0;
-        for(i=0;i<=n;i++)rk[sa[i]]=i;
-        for(i=0;i<n;i++) {
-            if(k)k--;
-            j=sa[rk[i]-1];
-            while(s[i+k]==s[j+k])k++;
-            h[rk[i]]=k;
-        }
-        
     }
+
 //    inline int cmp(char * pt, int p) {
 //        return strncmp(pt,s+sa[p],m);
 //    }
