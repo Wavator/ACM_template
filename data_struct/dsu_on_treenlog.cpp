@@ -1,19 +1,3 @@
-const int N = 100005;
-
-struct edge {
-    int y;
-    edge * next;
-};
-
-edge * li[N];
-
-inline void add_edge(int u, int v) {
-    static edge e[N << 1];
-    static edge * top = e;
-    li[u] = &(*top++ = (edge){v, li[u]});
-    li[v] = &(*top++ = (edge){u, li[v]});
-}
-
 int sz[N], son[N];
 
 void pre_dfs(int u, int fa) {
@@ -36,7 +20,7 @@ int c[N];
 struct my_map {
 
     int cnt[N];
-    set<int> s;
+    //set<int> s;
 
     int mx;
 
@@ -45,13 +29,9 @@ struct my_map {
     inline void insert(int u) {
         cnt[c[u]]++;
         if (cnt[c[u]] > mx) {
-            s.clear();
-            mx = cnt[c[u]];
             res = c[u];
-        } else if (mx == cnt[c[u]] && !s.count(c[u])) {
-            s.insert(c[u]);
-            res += c[u];
-        }
+            mx = cnt[c[u]];
+        } else if (mx == cnt[c[u]]) res += c[u];
     }
 
     void dfs(int u, int fa) {
@@ -65,7 +45,7 @@ struct my_map {
 
     inline void del(int u, int fa) {
         res = 0; mx = 0;
-        s.clear();
+        //s.clear();
         dfs(u, fa);
     }
 
