@@ -7,7 +7,7 @@ public:
         T w;
         edge * next;
     }e[M], *li[N];
-    edge * etop;
+    edge * etop=e;
     void init() {
         memset(li, 0, sizeof(li[0]) * (etop - e + 1));
         etop = e;
