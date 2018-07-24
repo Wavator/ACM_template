@@ -23,8 +23,11 @@ public:
         int v;
         for (edge * t = li[u]; t; t = t->next) {
             v = t->y;
-            if (v != f)
+            if (v != f) {
+                dep[v] = dep[u] + 1;
+                fa[v][0] = u;
                 dfs(v, u);
+            }
         }
     }
     void lca_prepare() {
