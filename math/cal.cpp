@@ -14,18 +14,20 @@ inline long long sub(const long long &a, const long long &b) {
 inline long long mul(const long long &a, const long long &b) {
     return (a * b) % mod;
 }
-
-inline long long mul_inv(long long a, long long b = mod) {
-    long long t1 = a, t2 = b, t3;
-    long long v1 = 1, v2 = 0, v3;
-    while (t2 != 1) {
-        long long x = t1 / t2;
-        t3 = t1 - x * t2;
-        v3 = v1 - x * v2;
-        t1 = t2, t2 = t3;
-        v1 = v2, v2 = v3;
+const ll mod = 1e9+7;
+ll ext_gcd(ll a, ll b, ll &d, ll &x, ll &y) {
+    if (b) {
+        ext_gcd(b, a % b, d, y, x);
+        y -= x * (a / b);
+    } else {
+        d = a, x = 1, y = 0;
     }
-    return (v2 + b) % b;
+}
+
+ll inv(ll a, ll n = mod) {
+    ll d, x, y;
+    ext_gcd(a, n, d, x, y);
+    return d == 1? (x + n) % n: -1;
 }
 
 inline long long div(long long a, long long b) {
