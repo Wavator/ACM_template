@@ -7,20 +7,16 @@ public:
         T w;
         edge * next;
     }e[M], *li[N];
-    int etop;
+    edge * etop;
     void init() {
-        memset(li, 0, sizeof(li));
-        etop = 0;
+        memset(li, 0, sizeof(li[0]) * (etop - e + 1));
+        etop = e;
     }
     inline void add_edge(int u, int v, const T &w = 0) {
-        e[etop].y = v;
-        e[etop].next = li[u];
-        e[etop].w = w;
-        li[u] = &e[etop++];
+        li[u] = &(*etop++=(edge){v,w,li[u]});
     }
     inline void add_edges(int u, int v, const T &w = 0) {
         add_edge(u, v, w);
         add_edge(v, u, w);
     }
-    
 };
