@@ -44,7 +44,7 @@ void my_debug(Head H, Tail... T) {
 #define debug(...) cerr << "[" << #__VA_ARGS__ << "]:", my_debug(__VA_ARGS__);
 #else
 #define debug(...) 42;
-#define cerr if (false) cout
+
 #endif
 
 typedef long long ll;
