@@ -7,7 +7,7 @@ namespace io {
         oS=obuf;
     }
     inline void putc(char x) { *oS++=x; if (oS==oT) flush(); }
-    template<class I> inline void gi(I&x) {
+    template<class I> inline void sc(I&x) {
         for (f=1,c=gc();c<'0'||c>'9';c=gc()) if (c=='-') f=-1;
         for (x=0;c<='9'&&c>='0';c=gc()) x=x*10+(c&15); x*=f;
     }
@@ -26,11 +26,13 @@ namespace io {
         for (l=0;c<='z'&&c>='a';c=gc()) s[l++]=c;
         s[l]=0;
     }
+    template <typename A, typename B> inline void sc(A&x,B&y){sc(x),sc(y);};
+    template <typename A, typename B> inline bool read(A&x,B&y){return read(x)&&read(y);};
     inline void ps(const char*s) { for (int i=0;s[i];++i) putc(s[i]); }
     struct IOFLUSHER{ ~IOFLUSHER() { flush(); } } _ioflusher_;
 }
 using io::putc;
-using io::gi;
+using io::sc;
 using io::gs;
 using io::ps;
 using io::print;
