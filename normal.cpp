@@ -1,38 +1,33 @@
+#pragma optimize("-O3")
 #include <bits/stdc++.h>
 using namespace std;
-template <typename A, typename B> inline ostream& operator << (ostream&os, const pair<A, B> &v) {
-    return os << v.first << ' ' << v.second;
-}
-template <typename T> inline ostream& operator << (ostream&os, const vector<T> &v) {
-    for (auto it = v.begin(); it != v.end(); os << (*it++)) if (it != v.cbegin()) os << ' ';
-    return os;
-}
-#ifdef Wavator
-#define debug(...) cerr << #__VA_ARGS__ << "[", _debug(__VA_ARGS__),
-#else
-#define debug(...) 98
-#define cerr if (false) cout
-#endif
-void _debug(){}
-template <typename H, typename...T>
-void _debug(H head, T...tail) {
-    cerr << head; sizeof...(tail)? cerr << ' ': cerr << "]" << flush; 
-    _debug(tail...);
-}
-#define rep(i, a, b) for (int (i) = (a); (i) < (b); ++(i))
-#define per(i, a, b) for (int (i) = (b) - 1; (i) >= (a); --(i))
-#define REP(i, a, b) for (int (i) = (a); (i) <= (b); ++(i))
+#define pb push_back
+#define rep(i,a,n) for(int i=(a);i<(n);++i)
+#define per(i,a,n) for(int i=(n)-1;i>=(a);--i)
+#define all(x) (x).begin(), (x).end()
+#define SZ(x) ((int)(x).size())
 #define fi first
 #define se second
-#define all(x) (x).begin(), (x).end()
-#define rall(x) (x).rbegin(), (x).rend()
-#define SZ(x) ((int)(x).size())
+#ifdef Wavator
+#define debug(fmt, ...) fprintf(stderr, "%s: %s = " fmt "\n", __func__, #__VA_ARGS__, __VA_ARGS__), fflush(stderr)
+#else
+#define debug(...) 99
+#endif
 typedef long long ll;
-typedef unsigned long long ull;
 typedef double db;
+typedef long double ld;
 typedef vector<int> vi;
-typedef vector<ll> vl;
 typedef pair<int, int> pii;
-typedef pair<ll, ll> pll;
-const int oo = 0x3f3f3f3f;
-const ll mod = (ll)1e9 + 7;
+const ll mod = (ll)1e9+7;
+ll pow_mod(ll a,ll b=mod-2){
+    assert(b>=0);ll res=1;for(a%=mod;b;b>>=1,a=a*a%mod)if(b&1)res=res*a%mod;
+    return res;
+}
+
+int main() {
+#ifdef Wavator
+    freopen("test.in","r",stdin);
+#endif
+
+    return 0;
+}
