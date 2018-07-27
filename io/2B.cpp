@@ -6,7 +6,7 @@ namespace io {
         fwrite(obuf,1,oS-obuf,stdout);
         oS=obuf;
     }
-    inline void putc(char x) { *oS++=x; if (oS==oT) flush(); }
+    inline void pc(char x) { *oS++=x; if (oS==oT) flush(); }
     template<class I> inline void sc(I&x) {
         for (f=1,c=gc();c<'0'||c>'9';c=gc()) if (c=='-') f=-1;
         for (x=0;c<='9'&&c>='0';c=gc()) x=x*10+(c&15); x*=f;
@@ -15,11 +15,20 @@ namespace io {
         for (f=1,c=gc();c<'0'||c>'9';c=gc()){ if(c==-1)return 0;if(c=='-') f=-1; }
         for(x=c-48;;x=x*10+(c&15)){ if(!isdigit(c=gc()))break;}x*=f; return 1;
     }
-    template<class I> inline void print(I x) {
-        if (!x) putc('0');
-        if (x<0) putc('-'),x=-x;
+    template<class I> inline void p(I x) {
+        if (!x) pc('0');
+        if (x<0) pc('-'),x=-x;
         while (x) st[++tp]=x%10+'0',x/=10;
-        while (tp) putc(st[tp--]);
+        while (tp) pc(st[tp--]);
+    }
+    template <typename T> inline void pl(T x){
+        p(x);pc('\n');
+    }
+    template <typename T> inline void pl(){
+        pc(10);
+    }
+    template <typename T> inline void ps(){
+        pc(30);
     }
     inline void gs(char*s, int&l) {
         for (c=gc();c<'a'||c>'z';c=gc());
@@ -31,9 +40,11 @@ namespace io {
     inline void ps(const char*s) { for (int i=0;s[i];++i) putc(s[i]); }
     struct IOFLUSHER{ ~IOFLUSHER() { flush(); } } _ioflusher_;
 }
-using io::putc;
+using io::pc;
 using io::sc;
 using io::gs;
 using io::ps;
-using io::print;
+using io::p;
+using io::pl;
+using io::ps;
 using io::read;
