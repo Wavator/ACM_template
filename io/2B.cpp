@@ -37,7 +37,7 @@ namespace io {
     }
     template <typename A, typename B> inline void sc(A&x,B&y){sc(x),sc(y);};
     template <typename A, typename B> inline bool read(A&x,B&y){return read(x)&&read(y);};
-    inline void ps(const char*s) { for (int i=0;s[i];++i) putc(s[i]); }
+    inline void ps(const char*s) { for (int i=0;s[i];++i) pc(s[i]); }
     struct IOFLUSHER{ ~IOFLUSHER() { flush(); } } _ioflusher_;
 }
 using io::pc;
