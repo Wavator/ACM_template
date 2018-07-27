@@ -1,50 +1,37 @@
-inline char gc() {
-    static char buf[1<<20], *head = buf, *tail = buf;
-    return (head == tail && (tail = (head = buf) + fread(buf, 1, 1 << 20, stdin), head == tail)? -1: *head++);
-}
-template <typename T> inline bool read(T &x) {
-    static bool f;
-    static char c;
-    for (c = gc(), f = false; !isdigit(c); c = gc()) {
-        if (c == EOF)
-            return false;
-        else if (c == 45)
-            f = true;
+namespace io {
+    const int L=(1<<21)+1;
+    char ibuf[L],*iS,*iT,obuf[L],*oS=obuf,*oT=obuf+L-1,c,st[55];int f,tp;
+#define gc() (iS==iT?(iT=(iS=ibuf)+fread(ibuf,1,L,stdin),(iS==iT?EOF:*iS++)):*iS++)
+    inline void flush() {
+        fwrite(obuf,1,oS-obuf,stdout);
+        oS=obuf;
     }
-    for (x = 0; isdigit(c); c = gc())
-        x = x * 10 + c - 48;
-    if (f)
-        x = -x;
-    return true;
-}
-inline bool read(double &x) {
-    static char c;
-    static bool f;
-    for(f = false; (c = gc()) != '-' && !isdigit(c);)
-        if (c == EOF) return false;
-    if (c == '-')
-        x = 0, f = true;
-    else
-        x = c & 15;
-    for (;isdigit(c = gc());)
-        x = x * 10 + (c & 15);
-    if (c == '.') {
-        double base = 1.0;
-        for (;isdigit(c = gc());)
-            x += (c & 15) * (base /= 10);
+    inline void putc(char x) { *oS++=x; if (oS==oT) flush(); }
+    template<class I> inline void gi(I&x) {
+        for (f=1,c=gc();c<'0'||c>'9';c=gc()) if (c=='-') f=-1;
+        for (x=0;c<='9'&&c>='0';c=gc()) x=x*10+(c&15); x*=f;
     }
-    if (f)
-        x = -x;
-    return true;
-}
-inline bool read(char s[]) {
-    static int ptr;
-    static char ch;
-    for (ch = gc(), ptr = 0; ch != ' ' && ch != '\n'; ch = gc()) {
-        if (ch == EOF)
-            return false;
-        s[ptr++] = ch;
+    template<class T> inline bool read(T&x){
+        for (f=1,c=gc();c<'0'||c>'9';c=gc()){ if(c==-1)return 0;if(c=='-') f=-1; }
+        for(x=c-48;;x=x*10+(c&15)){ if(!isdigit(c=gc()))break;}x*=f; return 1;
     }
-    s[ptr] = 0;
-    return true;
+    template<class I> inline void print(I x) {
+        if (!x) putc('0');
+        if (x<0) putc('-'),x=-x;
+        while (x) st[++tp]=x%10+'0',x/=10;
+        while (tp) putc(st[tp--]);
+    }
+    inline void gs(char*s, int&l) {
+        for (c=gc();c<'a'||c>'z';c=gc());
+        for (l=0;c<='z'&&c>='a';c=gc()) s[l++]=c;
+        s[l]=0;
+    }
+    inline void ps(const char*s) { for (int i=0;s[i];++i) putc(s[i]); }
+    struct IOFLUSHER{ ~IOFLUSHER() { flush(); } } _ioflusher_;
 }
+using io::putc;
+using io::gi;
+using io::gs;
+using io::ps;
+using io::print;
+using io::read;
