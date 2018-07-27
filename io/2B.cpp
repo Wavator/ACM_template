@@ -22,13 +22,16 @@ namespace io {
         while (tp) pc(st[tp--]);
     }
     template <typename T> inline void pl(T x){
-        p(x);pc('\n');
+        p(x);pc(10);
     }
-    template <typename T> inline void pl(){
+    inline void pl(){
         pc(10);
     }
-    template <typename T> inline void ps(){
+    inline void ps(){
         pc(30);
+    }
+    template <typename T> inline void ps(T x){
+        p(x);pc(30);
     }
     inline void gs(char*s, int&l) {
         for (c=gc();c<'a'||c>'z';c=gc());
