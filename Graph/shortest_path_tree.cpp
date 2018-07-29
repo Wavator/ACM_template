@@ -1,11 +1,11 @@
-class shortest_path_tree {
+class solver {
 private:
     int n, m, k;
     vector < vector<pii> >e;
     vector < int> d;
     vector < vector< int > > pre;
-    vector < vector<char> > ans;
-    vector < char > curr;
+    vector < string > ans;
+    string curr;
     void read() {
         for (int i = 0, u, v; i < m; ++i){
             scanf("%d%d",&u,&v);
@@ -50,13 +50,11 @@ private:
             }
     }
     void print() {
-        ios::sync_with_stdio(false);
-        cout.tie(nullptr);
-        cout << ans.size() << '\n';
-        for(const auto &s: ans) cout << s.data(), cout << '\n';
+        printf("%d\n",SZ(ans));
+        for (const auto &s: ans) printf("%s\n", s.c_str());
     }
 public:
-    shortest_path_tree(int n, int m, int k): n(n), m(m), k(k), e(n, vector<pii>()), d(n, -1), pre(n, vector<int>()), curr(m, '0'){}
+    solver(int n, int m, int k): n(n), m(m), k(k), e(n, vector<pii>()), d(n, -1), pre(n, vector<int>()), curr(m, '0'){}
     void solve() {
         read();
         bfs();
