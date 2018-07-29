@@ -5,4 +5,5 @@ struct del_able_heap {
     inline void maintain() { while(!b.empty()&&a.top()==b.top())a.pop(),b.pop(); }
     inline void pop() {maintain();a.pop();}
     inline int size() {return a.size()-b.size();}
+    inline int top() {maintain();return a.top();}
 };
