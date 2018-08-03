@@ -1,19 +1,19 @@
-typedef long long ll;
-namespace comb {
-    vector<ll> f, inv;
-    const ll mod=1000000009;
-    void init(int n = 100005) {
-        f.resize(n+1);
-        inv.resize(n+1);
-        f[0]=1;
-        for(ll i=1;i<=n;++i)
-            f[i]=f[i-1]*i%mod;
-        inv[0]=inv[1]=1;
-        for(ll i=2;i<=n;++i){
-            inv[i]=(mod-(mod/i)*(inv[mod%i])%mod)%mod;
+namespace comb
+{
+    const int N = ::N;
+    ll fact[N], finv[N];
+    void init()
+    {
+        fact[0]=1;
+        rep(i,1,N)fact[i]=fact[i-1]*i%mod;
+        finv[N-1]=pow_mod(fact[N-1],mod-2);
+        per(i,0,N-1){
+            finv[i]=finv[i+1]*(i+1)%mod;
+            assert(fact[i]%finv[i]%mod==1);
         }
     }
-    inline ll C(ll n, ll m) {
-        return (f[n] * inv[m] % mod) * inv[n - m];
+    inline ll C(int n, int m)
+    {
+        return (fact[n] * finv[m] % mod) * finv[n - m] % mod;
     }
 }
