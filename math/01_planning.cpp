@@ -12,7 +12,7 @@ int main() {
         rep(i,0,n)f[i]=1.*c[i]-mid*s[i];
         sort(f,f+n,greater<db>());
         db s=0;
-        rep(i,0,k)s+=f[i]; // remain k elements to make c[i]/s[i] maximize.
+        rep(i,0,k)s+=f[i]; // remain k elements to make sigma(c[i])/sigma(s[i]) maximize.
         if(s>0)l=mid;
         else r=mid;
     }
