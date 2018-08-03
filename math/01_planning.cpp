@@ -10,10 +10,10 @@ int main() {
     while(fabs(r-l)>eps){
         db mid=(l+r)/2.;
         rep(i,0,n)f[i]=1.*c[i]-mid*s[i];
-        sort(f,f+n,greater<db>());
+        nth_element(f,f+k,f+n,greater<db>());
         db s=0;
-        rep(i,0,k)s+=f[i]; // remain k elements to make sigma(c[i])/sigma(s[i]) maximize.
-        if(s>0)l=mid;
+        rep(i,0,k)s+=f[i];
+        if(s>-eps)l=mid;
         else r=mid;
     }
     return !printf("%.10f\n",l);
