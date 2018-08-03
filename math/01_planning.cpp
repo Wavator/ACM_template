@@ -6,8 +6,7 @@ int main() {
     scanf("%d%d", &n, &k);
     rep(i,0,n)scanf("%d",s+i);
     rep(i,0,n)scanf("%d",c+i);
-    db l=0,r=2000;
-    rep(i,0,n)c[i]*=s[i];
+    db l=0,r=*max_element(c,c+n);
     while(fabs(r-l)>eps){
         db mid=(l+r)/2.;
         rep(i,0,n)f[i]=1.*c[i]-mid*s[i];
