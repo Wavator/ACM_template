@@ -16,8 +16,9 @@ public class Main {
         reader = new BufferedReader(new InputStreamReader(System.in), 32768);
         read_token = null;
         long st = System.currentTimeMillis();
-        solve();
+        long st = System.currentTimeMillis();
         out = new PrintWriter(System.out);
+        solve();
         tr(System.currentTimeMillis() - st);
         out.close();
     }
