@@ -34,3 +34,47 @@ using Quick_in::sc;
 using Quick_in::read;
 using Quick_in::gline;
 using Quick_in::gs;
+
+
+struct Quick_Out {
+    static const int BUFFER_MAX_SIZE = 1<<18;
+    char buf[BUFFER_MAX_SIZE], *ph = buf, *pt = buf + BUFFER_MAX_SIZE;
+    char tmp[100];
+    const double dx[15] = {5e-1,5e-2,5e-3,5e-4,5e-5,5e-6,5e-7,5e-8,5e-9,5e-10,5e-11,5e-12,5e-13,5e-14,5e-15};
+    inline void my_flush() {
+        fwrite(buf, sizeof(char), ph - buf, stdout);
+        ph = buf;
+    }
+    inline void pc(char c) {
+        *(ph++) = c;
+        if (ph == pt) my_flush();
+    }
+    inline void ps(const char *s) {
+        for (int i = 0; s[i]; ++i) pc(s[i]);
+    }
+    inline void ps(const string&s) {
+        ps(s.c_str());
+    }
+    template<class T>
+    inline void pi(T x, char ec = '\n') {
+        if (x < 0) pc('-'), x = -x;
+        int len = 0;
+        if (!x) tmp[len++] = '0';
+        for(;x;) tmp[len++] = x % 10 + '0', x /= 10;
+        for(;len;)  pc(tmp[--len]);
+        pc(ec);
+    }
+    void pd(double x, int fix = 8, char bc = '\n') {
+        x += dx[fix];
+        if (x < 0) pc('-'), x = -x;
+        pi((long long)x, '.');
+        x -= (long long)x;
+        for(;fix--;) {
+            x *= 10;
+            pc('0' + (int)x);
+            x -= (int)x;
+        }
+        pc(bc);
+    }
+    ~Quick_Out() { my_flush(); }
+} out;
