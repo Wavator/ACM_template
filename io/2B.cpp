@@ -1,11 +1,15 @@
 namespace Quick_in {
     const int LEN=(1<<21)+1; char ibuf[LEN],*iH,*iT;int f,c;
 #define gc() (iH==iT?(iT=(iH=ibuf)+fread(ibuf,1,LEN,stdin),(iH==iT?EOF:*iH++)):*iH++)
+    inline char nc(){
+        while((c=gc())<=32)if(c==-1)return -1;
+        return (char)c;
+    }
     template<class T> inline void sc(T&x) {
         for (f=1,c=gc();c<'0'||c>'9';c=gc()) if (c=='-') f=-1;
         for (x=0;c<='9'&&c>='0';c=gc()) x=x*10+(c&15); x*=f;
     }
-    template<class T> inline bool read(T&x){
+    template<class T> inline bool read(T&x) {
         for (f=1,c=gc();c<'0'||c>'9';c=gc()){ if(c==-1)return 0;if(c=='-') f=-1; }
         for(x=c-48;;x=x*10+(c&15)){ if(!isdigit(c=gc()))break;}x*=f; return 1;
     }
@@ -30,13 +34,7 @@ namespace Quick_in {
     template <typename A, typename B> inline void sc(A&x,B&y){sc(x),sc(y);};
     template <typename A, typename B> inline bool read(A&x,B&y){return read(x)&&read(y);};
 }
-using Quick_in::sc;
-using Quick_in::read;
-using Quick_in::gline;
-using Quick_in::gs;
-
-
-struct Quick_Out {
+namespace Quick_out {
     static const int BUFFER_MAX_SIZE = 1<<18;
     char buf[BUFFER_MAX_SIZE], *ph = buf, *pt = buf + BUFFER_MAX_SIZE;
     char tmp[100];
@@ -76,5 +74,14 @@ struct Quick_Out {
         }
         pc(bc);
     }
-    ~Quick_Out() { my_flush(); }
-} out;
+    struct Quick_{~Quick_(){my_flush();}};
+}
+using Quick_in::sc;
+using Quick_in::read;
+using Quick_in::gline;
+using Quick_in::gs;
+using Quick_in::nc;
+using Quick_out::pi;
+using Quick_out::pc;
+using Quick_out::ps;
+using Quick_out::pd;
