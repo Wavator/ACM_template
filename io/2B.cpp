@@ -64,7 +64,7 @@ struct Quick_Out {
         for(;len;)  pc(tmp[--len]);
         pc(ec);
     }
-    void pd(double x, int fix = 8, char bc = '\n') {
+    inline void pd(double x, int fix = 8, char bc = '\n') {
         x += dx[fix];
         if (x < 0) pc('-'), x = -x;
         pi((long long)x, '.');
