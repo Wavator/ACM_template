@@ -74,7 +74,7 @@ namespace Quick_out {
         }
         pc(bc);
     }
-    struct Quick_{~Quick_(){my_flush();}};
+    struct Quick_{~Quick_(){my_flush();}}oooOoooOO;
 }
 using Quick_in::sc;
 using Quick_in::read;
