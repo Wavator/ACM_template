@@ -1,4 +1,4 @@
-namespace check_prime {
+namespace random_algorithms {
 
     void init() {
         srand(time(0));
@@ -47,6 +47,44 @@ namespace check_prime {
             }
         }
         return true;
+    }
+
+    inline ll pollard_rho(ll n, int c = 2730) { // get a
+        ll i = 1,k = 2, x = rand_ll() % n,y = x,d;
+        for(;;){
+            i++, x=(multiply(x, x, n) + c) % n;
+            d=__gcd(y - x,n);
+            if(d > 1 && d < n)
+                return d;
+            if(y == x)
+                return n;
+            if(i == k)
+                y=x, k<<=1;
+        }
+    }
+
+    vector<ll> factors;
+
+    void fact(ll x, int c = 2370)
+    {
+        if (x == 1)
+            return;
+        if (check(x))
+        {
+            factors.push_back(x);
+            return;
+        }
+        ll m = x;
+        for(;m==x;)m=pollard_rho(x,c--);
+        fact(m/c,c);
+        fact(x/m,c);
+    }
+
+    inline vector<ll> fast_fact(ll x, int c = 2730)
+    {
+        factors = vector<ll>();
+        fact(x, c);
+        return move(factors);
     }
 
     inline bool check_prime_normal(ll x) {
