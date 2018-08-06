@@ -16,4 +16,10 @@ namespace comb
     {
         return (fact[n] * finv[m] % mod) * finv[n - m] % mod;
     }
+    inline ll lucas(ll n, ll m) {
+        if(n < m) return 0;
+        if(!m || n == m)
+            return 1;
+        return C(n % mod,m % mod) * lucas(n / mod,m / mod) % mod;
+    }
 }
