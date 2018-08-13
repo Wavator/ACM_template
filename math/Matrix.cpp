@@ -1,43 +1,50 @@
-template <typename type>
-class mat {
-public:
-    static const long long mod = 0x989687;
-    int n;
-    vector<vector<type > > a;
-    mat(int n = 0, type dig = 0) : n(n) {
-        a = vector<vector<type> >(n, vector<type>(n, 0));
-        for (int i = 0; i < n; ++i)
-            a[i][i] = dig;
+struct Mat{
+    int a[3][3];
+    int n,m;
+    Mat(int _n,int _m){
+        n=_n,m=_m;
+        for(int i=0;i<n;i++)
+            fill(a[i],a[i]+m,0);
+    }
+    Mat operator+(const Mat &b)const{
+        Mat tmp(n,m);
+        for(int i=0;i<n;i++)
+            for(int j=0;j<m;j++){
+                tmp.a[i][j]=add(a[i][j],b.a[i][j]);
+            }
+        return tmp;
+    }
+    
+    Mat operator-(const Mat &b)const{
+        Mat tmp(n,m);
+        for(int i=0;i<n;i++)
+            for(int j=0;j<m;j++){
+                tmp.a[i][j]=sub(a[i][j],b.a[i][j]);
+            }
+        return tmp;
+    }
+    
+    Mat operator*(const Mat &b)const{
+        Mat ret(n,b.m);
+        for(int i=0;i<n;i++)
+            for(int j=0;j<m;j++)
+                for(int k=0;k<m;k++){
+                    ret.a[i][j]=add(ret.a[i][j], mul(a[i][k], b.a[k][j]));
+                }
+        return ret;
     }
 
-    vector<type>&operator[](const int m){
-        return a[m];
-    }
-
-    mat operator * (mat &b) const {
-        mat<type> res(n);
-        for (int i = 0; i < n; ++i)
-            for (int j = 0; j < n; ++j)
-                for (int k = 0; k < n; ++k)
-                    res[i][j] += a[i][k] * b[k][j] % mod, res[i][j] %= mod;
-        return res;
-    }
-
-    void operator *= (mat &b) {
-        *this = (*this) * b;
-    }
-
-    void operator ^= (long long t) {
-        *this = *this ^ t;
-    }
-    mat operator^(long long t) const {
-        mat<type> res(n);
-        for(int i = 0; i < n; ++i)
-            res[i][i] = 1;
-        auto a = *this;
-        for(; t; t >>= 1, a = a * a)
-            if (t & 1)
-                res = res * a;
-        return res;
+    Mat operator^(long long k)const{
+        Mat ret(n,m),b(n,m);
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++)
+                b.a[i][j]=a[i][j];
+            ret.a[i][i]=1;
+        }
+        for(;k;k>>=1,b=b*b){
+            if(k&1)
+                ret=ret*b;
+        }
+        return ret;
     }
 };
