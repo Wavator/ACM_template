@@ -1,3 +1,5 @@
+#include <bits/stdc++.h>
+using namespace std;
 namespace Quick_in {
     const int LEN=(1<<21)+1; char ibuf[LEN],*iH,*iT;int f,c;
 #define gc() (iH==iT?(iT=(iH=ibuf)+fread(ibuf,1,LEN,stdin),(iH==iT?EOF:*iH++)):*iH++)
@@ -34,6 +36,13 @@ namespace Quick_in {
     template <typename A, typename B> inline void sc(A&x,B&y){sc(x),sc(y);};
     template <typename A, typename B> inline bool read(A&x,B&y){return read(x)&&read(y);};
 }
+
+using Quick_in::sc;
+using Quick_in::read;
+using Quick_in::gline;
+using Quick_in::gs;
+using Quick_in::nc;
+
 namespace Quick_out {
     static const int BUFFER_MAX_SIZE = 1<<18;
     char buf[BUFFER_MAX_SIZE], *ph = buf, *pt = buf + BUFFER_MAX_SIZE;
@@ -43,45 +52,41 @@ namespace Quick_out {
         fwrite(buf, sizeof(char), ph - buf, stdout);
         ph = buf;
     }
-    inline void pc(char c) {
+    inline void oc(char c) {
         *(ph++) = c;
         if (ph == pt) my_flush();
     }
-    inline void ps(const char *s) {
-        for (int i = 0; s[i]; ++i) pc(s[i]);
+    inline void os(const char *s) {
+        for (int i = 0; s[i]; ++i) oc(s[i]);
     }
-    inline void ps(const string&s) {
-        ps(s.c_str());
+    inline void os(const string&s) {
+        os(s.c_str());
     }
     template<class T>
-    inline void pi(T x, char ec = '\n') {
-        if (x < 0) pc('-'), x = -x;
+    inline void oi(T x, char ec = '\n') {
+        if (x < 0) oc('-'), x = -x;
         int len = 0;
         if (!x) tmp[len++] = '0';
         for(;x;) tmp[len++] = x % 10 + '0', x /= 10;
-        for(;len;)  pc(tmp[--len]);
-        pc(ec);
+        for(;len;)  oc(tmp[--len]);
+        oc(ec);
     }
-    inline void pd(double x, int fix = 8, char bc = '\n') {
+    inline void od(double x, int fix = 8, char bc = '\n') {
         x += dx[fix];
-        if (x < 0) pc('-'), x = -x;
-        pi((long long)x, '.');
+        if (x < 0) oc('-'), x = -x;
+        oi((long long)x, '.');
         x -= (long long)x;
         for(;fix--;) {
             x *= 10;
-            pc('0' + (int)x);
+            oc('0' + (int)x);
             x -= (int)x;
         }
-        pc(bc);
+        oc(bc);
     }
     struct Quick_{~Quick_(){my_flush();}}oooOoooOO;
 }
-using Quick_in::sc;
-using Quick_in::read;
-using Quick_in::gline;
-using Quick_in::gs;
-using Quick_in::nc;
-using Quick_out::pi;
-using Quick_out::pc;
-using Quick_out::ps;
-using Quick_out::pd;
+
+using Quick_out::oi;
+using Quick_out::oc;
+using Quick_out::os;
+using Quick_out::od;
