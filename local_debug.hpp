@@ -12,6 +12,13 @@ namespace DEBUG
 #include <bits/stdc++.h>
     using std::to_string;
     using namespace std;
+
+    string to_string(char x)
+    {
+        int y = x;
+        return to_string(y);
+    }
+
     string to_string(string s) { return '"' + s + '"'; }
 
     string to_string(const char* s) { return to_string((string) s); }
@@ -19,7 +26,6 @@ namespace DEBUG
     string to_string(bool b) { return (b ? "true" : "false"); }
 
     template <typename A, typename B> string to_string(pair<A, B> p) { return "(" + to_string(p.first) + ", " + to_string(p.second) + ")"; }
-
 
     template <class A>
     string to_string(stack<A> s)
@@ -103,13 +109,20 @@ namespace DEBUG
         res += "}";
         return res;
     }
-
-    void debug_out() {}
+    void debug_out() {cerr<<endl;}
     template <typename Head, typename... Tail>
     void debug_out(Head H, Tail... T) {
         cerr << " " << to_string(H);
         debug_out(T...);
     }
+    
+    struct freopener {
+        freopener() {
+            freopen("test.in","r",stdin);
+        }
+    };
+    static freopener __freopen__;
+
 }
 
-#define debug(...) DEBUG::cerr << "[" << #__VA_ARGS__ << "]:", DEBUG::debug_out(__VA_ARGS__)
+#define debug(...) DEBUG::cerr << "[" << #__VA_ARGS__ << "]:", DEBUG::debug_out(__VA_ARGS__), fflush(stderr)
