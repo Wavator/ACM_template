@@ -8,7 +8,7 @@ namespace comb {
         per(i,0,N-1){
             finv[i]=mul(finv[i+1],i+1);
 #ifdef Wavator
-            assert(fact[i]*finv[i]%mod==1);
+            assert(1ll*fact[i]*finv[i]%mod==1);
 #endif
         }
     }
