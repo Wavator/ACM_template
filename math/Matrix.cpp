@@ -15,7 +15,7 @@ struct Mat{
     Mat operator*(const Mat &b)const{
         Mat ret(n,b.m);
         for(int i=0;i<n;i++)
-            for(int j=0;j<m;j++)
+            for(int j=0;j<b.m;j++)
                 for(int k=0;k<m;k++){
                     ll t = (ll)a[i][k] * b.a[k][j];
                     if (t >= mod)
