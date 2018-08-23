@@ -1,11 +1,12 @@
+#include <bits/stdc++.h>
+using namespace std;
 //虚树上包含所有关键点和关键点之间所有的lca，虚树的dfs序下(相邻两点的距离和+首尾两点距离)/2为关键点构成一棵树的最小花费
 const int N = 100005;
 vector<int> g[N];
 namespace vtree {
     vector<int> vtree[N];
     int depth = 0, bn = 0, b[N << 1];
-    int fuck[N << 1], dfn[N], dis[N], fs[N];
-    
+    int fuck[N << 1], dfn[N], dep[N], fs[N];
     void dfs(int u, int fa) {
         int tmp = ++depth;
         b[++bn] = tmp;
@@ -13,7 +14,7 @@ namespace vtree {
         dfn[u] = bn;
         for (auto v:g[u]) {
             if (v == fa) continue;
-            dis[v] = dis[u] + 1;
+            dep[v] = dep[u] + 1;
             dfs(v, u);
             b[++bn] = tmp;
         }
@@ -58,7 +59,7 @@ namespace vtree {
             vtree[u].clear();
             if (vlca == fs[sz]) fs[++sz] = u;
             else {
-                while (sz >= 1 && dis[fs[sz - 1]] >= dis[vlca]) {
+                while (sz >= 1 && dep[fs[sz - 1]] >= dep[vlca]) {
                     vtree[fs[sz - 1]].push_back(fs[sz]);
                     sz--;
                 }
@@ -73,12 +74,19 @@ namespace vtree {
         for (int i = 0; i < sz; ++i) vtree[fs[i]].push_back(fs[i + 1]);
         vec.clear();
     }
-    
+
     void solve() {
-        dis[1] = 1;
+        dep[1] = 1;
         dfs(1,0);
         st_init();
         build_tree();
     }
-    
+
+}
+
+
+
+int main() {
+
+    return 0;
 }
