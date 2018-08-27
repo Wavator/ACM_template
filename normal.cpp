@@ -18,7 +18,7 @@ using namespace std;
 #define SZ(x) ((int)(x).size())
 #define fi first
 #define se second
-typedef unsigned long long ll;
+typedef long long ll;
 typedef double db;
 typedef vector<int> vi;
 typedef vector<vi> vvi;
