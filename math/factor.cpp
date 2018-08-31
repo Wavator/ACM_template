@@ -42,6 +42,7 @@ struct Factor {
         }
         return p;
     }
+
     /*
      * 得到<=sz的phi函数，存储在phi中
      */
@@ -159,13 +160,14 @@ struct Factor {
         }
         return prime;
     }
+
     /*
      * 得到x的所有素数因子，复杂度是sqrt(x)中的素数个数
      * x应该小于筛的范围的最大素数的平方
      */
     vector<ll> prime_factor(ll x) const {
         vector<ll> res;
-        for (int i = 0; (ll)prime[i] * prime[i] <= x; ++i) {
+        for (int i = 0; (ll) prime[i] * prime[i] <= x; ++i) {
             if (x % prime[i] == 0) {
                 res.push_back(prime[i]);
                 while (x % prime[i] == 0) {
@@ -202,14 +204,14 @@ struct Factor {
      */
     vector<pair<ll, int> > prime_factorize(ll x) const {
         vector<pair<ll, int> > res;
-        for (int i = 0; (ll)prime[i] * prime[i] <= x; ++i) {
+        for (int i = 0; (ll) prime[i] * prime[i] <= x; ++i) {
             if (x % prime[i] == 0) {
                 int cnt = 0;
                 while (x % prime[i] == 0) {
                     ++cnt;
                     x /= prime[i];
                 }
-                res.emplace_back((ll)prime[i], cnt);
+                res.emplace_back((ll) prime[i], cnt);
             }
         }
         if (x != 1) {
@@ -229,8 +231,8 @@ struct Factor {
         if (x < is_prime.size()) {
             return is_prime[x];
         }
-        for (int i = 0; i < (int)prime.size(); ++i) {
-            if ((long long)prime[i] * prime[i] > x) {
+        for (int i = 0; i < (int) prime.size(); ++i) {
+            if ((long long) prime[i] * prime[i] > x) {
                 break;
             }
             if (x % prime[i] == 0) {
@@ -255,6 +257,7 @@ struct Factor {
             return ret;
         }
     }
+
     /*
      * 基本快速幂 log
      */
@@ -406,6 +409,7 @@ struct Factor {
             _factor(n / x);
         }
     }
+
     /*
      * 对一个巨大的数做因数分解，存在fac里，理论上ll范围内都很快得到
      */
@@ -474,6 +478,7 @@ struct Factor {
      * 对sz以内的数，计算因子的和，存在sumdiv里
      */
     vector<ll> sumdiv;
+
     void SieveSumDiv() {
         sumdiv.resize(sz + 1);
         for (int i = 1; i <= sz; ++i) {
@@ -491,7 +496,7 @@ struct Factor {
         if (n == 0) {
             n = sz;
         }
-        vector<vector<int>> res((unsigned)n + 1, vector<int>());
+        vector<vector<int>> res((unsigned) n + 1, vector<int>());
         for (int i = 1; i <= n; ++i) {
             for (int j = i; j <= sz; j += i) {
                 res[j].push_back(i);
@@ -514,63 +519,11 @@ struct Factor {
     }
 
     /*
-     * 简单的extgcd
-     */
-    void ext_gcd(ll a, ll b, ll &d, ll &x, ll &y) {
-        if (b) {
-            ext_gcd(b, a % b, d, y, x);
-            y -= x * (a / b);
-        } else {
-            d = a, x = 1, y = 0;
-        }
-    }
-
-    /*
-     * 中国剩余定理
-     * x=a[i](mod m[i]), 0 base
-     * */
-    ll crt(int n, ll *a, ll *m) {
-        ll M = 1, d, y, x = 0, w;
-        for (int i = 0; i < n; ++i) {
-            M *= m[i];
-        }
-        for (int i = 0; i < n; ++i) {
-            w = M / m[i];
-            ext_gcd(m[i], w, d, d, y);
-            x = (x + y * w * a[i]) % mod;
-        }
-        return (x + mod) % mod;
-    }
-
-    /*
-     * 模意义下二次剩余,sqrt(n)
-     */
-    ll tonelli_shanks(ll n, ll p = (ll) 1e9 + 9) {//sqrt(n)
-        if (p == 2)
-            return (n & 1) ? 1 : -1;
-        if (powl(n, p >> 1, p) != 1)
-            return -1;
-        if (p & 2)
-            return powl(n, (p + 1) >> 2, p);
-        int s = __builtin_ctzll(p ^ 1);
-        ll q = p >> s, z = 2;
-        for (; powl(z, p >> 1, p) == 1; ++z);
-        ll c = powl(z, q, p), r = powl(n, (q + 1) >> 1, p), t = powl(n, q, p), tmp;
-        for (int m = s, i; t != 1;) {
-            for (i = 0, tmp = t; tmp != 1; ++i) tmp = tmp * tmp % p;
-            for (; i < --m;) c = c * c % p;
-            r = r * c % p;
-            c = c * c % p;
-            t = t * c % p;
-        }
-        return r;
-    }
-
-    /*
      * 计算miu的前缀和，复杂性n^(3/4),能跑2e9,calphi类似，计算前要调用gen_sum函数
      */
     vector<ll> sum_miu;
     map<ll, ll> sum_miu_mp;
+
     ll cal_sum_miu(ll x) {
         if (x <= sz) {
             return sum_miu[x];
