@@ -5,7 +5,7 @@ struct number_theory {
     vector<bool> is_prime;
     vector<int> prime, phi, miu, pi;
 
-    number_theory(int n = (int) 5e6 + 5) : sz(n) {
+    number_theory(int n = (int) 1e6 + 5) : sz(n) {
         sieve();
     }
 
