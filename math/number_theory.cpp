@@ -1,11 +1,11 @@
 struct number_theory {
     typedef long long ll;
-    const ll mod=(ll)1e9 + 7;
+    const ll mod = (ll) 1e9 + 7;
     int p, sz;
     vector<bool> is_prime;
     vector<int> prime, phi, miu, pi;
 
-    number_theory(int n = (int) 1e6 + 5) : sz(n) {
+    number_theory(int n = (int) 5e6 + 5) : sz(n) {
         sieve();
     }
 
@@ -120,6 +120,32 @@ struct number_theory {
                 }
             }
         }
+    }
+
+    vector<ll> segment_seive(ll a, ll b) {//[a, b) primes
+        vector<ll> prime;
+        unsigned sz = (unsigned) sqrt(b);
+        while ((ll) sz * sz <= b) {
+            ++sz;
+        }
+        vector<bool> is_prime_small(sz + 1, true);
+        vector<bool> is_prime(b - a, true);
+        for (ll i = 2; (ll) i * i <= b; i++) {
+            if (is_prime_small[i]) {
+                for (ll j = 2 * i; (ll) j * j <= b; j += i) {
+                    is_prime_small[j] = false;
+                }
+                for (ll j = max(2LL, (a + i - 1) / i) * i; j < b; j += i) {
+                    is_prime[j - a] = false;
+                }
+            }
+        }
+        for (ll i = 0; i < b - a; i++) {
+            if (is_prime[i] && a + i != 1) {
+                prime.push_back(a + i);
+            }
+        }
+        return prime;
     }
 
     vector<int> prime_factor(int x) const {
@@ -414,7 +440,7 @@ struct number_theory {
         return (x + mod) % mod;
     }
 
-    ll tonelli_shanks(ll n, ll p = (ll)1e9 + 9) {//sqrt(n)
+    ll tonelli_shanks(ll n, ll p = (ll) 1e9 + 9) {//sqrt(n)
         if (p == 2)
             return (n & 1) ? 1 : -1;
         if (powl(n, p >> 1, p) != 1)
@@ -467,6 +493,26 @@ struct number_theory {
         for (int i = 1; i <= sz; ++i) {
             sum_miu[i] = sum_miu[i - 1] + miu[i];
         }
+    }
+
+    vector<ll> const_power_head, const_init_power;
+    unsigned power_block = 100000;
+    void gen_const_power(ll val) {
+        const_power_head.resize(power_block + 2);
+        const_init_power.resize(power_block + 2);
+        const_init_power[0] = 1;
+        for (int i = 1; i <= power_block; ++i) {
+            const_init_power[i] = const_init_power[i - 1] * val % mod;
+        }
+        const_power_head[0] = 1;
+        for (int i = 1; i <= power_block; ++i) {
+            const_power_head[i] = const_power_head[i - 1] * const_init_power[power_block] % mod;
+        }
+    }
+
+    inline ll get_const_power(ll x) { // val ^ x
+        x %= (mod - 1); // x %= euler_phi(mod);
+        return const_power_head[x / power_block] * const_init_power[x % power_block] % mod;
     }
 
 } nt;
