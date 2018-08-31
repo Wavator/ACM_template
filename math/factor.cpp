@@ -5,10 +5,13 @@ struct Factor {
     vector<bool> is_prime;
     vector<int> prime, phi, miu, pi;
 
-    number_theory(int n = (int) 5e6 + 5) : sz(n) {
-        sieve();
-    }
+    Factor(int n = (int) 1e6 + 5) : sz(n) { sieve(); }
 
+    /*
+     * 得到<=sz的素数，is_prime 存储是不是素数，素数存储在prime中；
+     * pi表示一个数的最小素因子，pi=i也说明i是素数(i >= 2);
+     * sieve不需要调暗勇，但需要注意杜教筛n最好是maxn的2/3次
+     * */
     int sieve() {
         static bool f = false;
         if (f) {
@@ -39,7 +42,9 @@ struct Factor {
         }
         return p;
     }
-
+    /*
+     * 得到<=sz的phi函数，存储在phi中
+     */
     void gen_phi() {
         static bool f = false;
         if (f) {
@@ -66,6 +71,9 @@ struct Factor {
         }
     }
 
+    /*
+    * 得到<=sz的miu函数，存储在miu中
+    */
     void gen_miu() {
         static bool f = false;
         if (f) {
@@ -92,6 +100,7 @@ struct Factor {
         }
     }
 
+    //保证速度，将phi,miu放到一起筛
     void gen_phi_miu() {
         static bool f = false;
         if (f) {
@@ -122,6 +131,9 @@ struct Factor {
         }
     }
 
+    /*
+     * 分段打表，得到[a,b)以内的素数,答案存储在返回的vector<ll>里，复杂度sqrt(b) + (b-a)
+     */
     vector<ll> segment_seive(ll a, ll b) {//[a, b) primes
         vector<ll> prime;
         unsigned sz = (unsigned) sqrt(b);
@@ -147,10 +159,13 @@ struct Factor {
         }
         return prime;
     }
-
-    vector<int> prime_factor(int x) const {
-        vector<int> res;
-        for (int i = 0; prime[i] * prime[i] <= x; ++i) {
+    /*
+     * 得到x的所有素数因子，复杂度是sqrt(x)中的素数个数
+     * x应该小于筛的范围的最大素数的平方
+     */
+    vector<ll> prime_factor(ll x) const {
+        vector<ll> res;
+        for (int i = 0; (ll)prime[i] * prime[i] <= x; ++i) {
             if (x % prime[i] == 0) {
                 res.push_back(prime[i]);
                 while (x % prime[i] == 0) {
@@ -164,6 +179,9 @@ struct Factor {
         return res;
     }
 
+    /*
+     * 得到x的所有因数，sqrt(x)的复杂度
+     */
     vector<ll> all_factor(ll x) const {
         vector<ll> res;
         for (ll i = 1; i * i <= x; ++i) {
@@ -177,16 +195,21 @@ struct Factor {
         return res;
     }
 
-    vector<pair<int, int> > prime_factorize(int x) const {
-        vector<pair<int, int> > res;
-        for (int i = 0; prime[i] * prime[i] <= x; ++i) {
+    /*
+     * 得到x的所有素因子，以及在x的唯一分解定理意义下该素数的幂次，
+     * pair<ll,int>代表因子，幂次
+     * 复杂度是sqrt(x)中的素数个数
+     */
+    vector<pair<ll, int> > prime_factorize(ll x) const {
+        vector<pair<ll, int> > res;
+        for (int i = 0; (ll)prime[i] * prime[i] <= x; ++i) {
             if (x % prime[i] == 0) {
                 int cnt = 0;
                 while (x % prime[i] == 0) {
                     ++cnt;
                     x /= prime[i];
                 }
-                res.emplace_back(prime[i], cnt);
+                res.emplace_back((ll)prime[i], cnt);
             }
         }
         if (x != 1) {
@@ -195,18 +218,31 @@ struct Factor {
         return res;
     }
 
+    /*
+     * 简单素性测试,根据合数sqrt(x)内一定有一个素因子
+     * 复杂度：sqrt(x)以内的素数个数
+     */
     inline bool check_prime(ll x) const {
-        if (x <= is_prime.size() && x >= 0) {
+        if (x < 2) {
+            return false;
+        }
+        if (x < is_prime.size()) {
             return is_prime[x];
         }
-        for (ll i = 2; i * i <= x; ++i) {
-            if (x % i == 0) {
+        for (int i = 0; i < (int)prime.size(); ++i) {
+            if ((long long)prime[i] * prime[i] > x) {
+                break;
+            }
+            if (x % prime[i] == 0) {
                 return false;
             }
         }
-        return x >= 2;
+        return true;
     }
 
+    /*
+     * ll范围内模意义快速乘法
+     */
     inline ll mull(ll a, ll b, ll p) const {
         if (p <= 1000000000) {
             return a * b % p;
@@ -219,7 +255,9 @@ struct Factor {
             return ret;
         }
     }
-
+    /*
+     * 基本快速幂 log
+     */
     inline ll pow_mod(ll a, ll b) {
         ll res = 1;
         for (a %= mod; b; b >>= 1, a = a * a % mod) {
@@ -230,6 +268,9 @@ struct Factor {
         return res;
     }
 
+    /*
+     * 任意模数ll内快速幂 log
+     */
     ll powl(ll a, ll b, ll p) {
         ll ans = 1;
         for (; b; b >>= 1) {
@@ -239,6 +280,9 @@ struct Factor {
         return ans;
     }
 
+    /*
+     * Miller素性检测使用
+     */
     bool witness(ll a, ll n) {
         int t = 0;
         ll u = n - 1;
@@ -254,12 +298,16 @@ struct Factor {
         return _x != 1;
     }
 
-
+    /*
+     * Miller素性检测使用
+     */
     inline long long randll() {
         return (ll) rand() << 30 | rand();
     }
 
-
+    /*
+     * 快速检测素性
+     */
     bool miller(ll n) {
         if (n < 2) {
             return 0;
@@ -278,6 +326,9 @@ struct Factor {
         return 1;
     }
 
+    /*
+     * 光速gcd
+     */
     ll gcd(ll a, ll b) {
         ll ret = 1;
         while (a != 0) {
@@ -298,7 +349,9 @@ struct Factor {
         return ret * b;
     }
 
-
+    /*
+     * 快速扒出n的一个素因子
+     */
     ll rho(ll n) {
         static ll a[1001000];
         for (;;) {
@@ -353,13 +406,18 @@ struct Factor {
             _factor(n / x);
         }
     }
-
+    /*
+     * 对一个巨大的数做因数分解，存在fac里，理论上ll范围内都很快得到
+     */
     vector<ll> fact_big(ll n) {
         fac.clear();
         _factor(n);
         return fac;
     }
 
+    /*
+     * 基于ext_gcd的逆元，log，-1代表没有逆元
+     */
     inline int inv_normal(int a) {
         a %= mod;
         if (a < 0) a += mod;
@@ -377,6 +435,9 @@ struct Factor {
         return u;
     }
 
+    /*
+     * 计算phi(x), 复杂性sqrt(x)的质数个数
+     */
     ll euler_phi(ll x) {
         //map<ll,ll> pf;
         ll num = 1;
@@ -400,14 +461,19 @@ struct Factor {
         return num;
     }
 
+    /*
+     * 广义的逆元，根据欧拉降幂
+     */
     ll inv_general(ll a, ll mod) {
         ll ph = euler_phi(mod);
         ph--;
         return powl(a, ph, mod);
     }
 
+    /*
+     * 对sz以内的数，计算因子的和，存在sumdiv里
+     */
     vector<ll> sumdiv;
-
     void SieveSumDiv() {
         sumdiv.resize(sz + 1);
         for (int i = 1; i <= sz; ++i) {
@@ -417,6 +483,39 @@ struct Factor {
         }
     }
 
+    /*
+     * 类似线性筛的筛出[1,n]的每个数的因子
+     * n不能筛的很大，最多1e5,因为空间无法接受
+     */
+    vector<vector<int> > factor_range(int n = 0) {
+        if (n == 0) {
+            n = sz;
+        }
+        vector<vector<int>> res((unsigned)n + 1, vector<int>());
+        for (int i = 1; i <= n; ++i) {
+            for (int j = i; j <= sz; j += i) {
+                res[j].push_back(i);
+            }
+        }
+        return res;
+    }
+
+    /*
+     * 类似线性筛筛出[1,n]以内每个数的素因子
+     */
+    vector<vector<int> > prime_fact_range() {
+        vector<vector<int> > res(sz + 1, vector<int>());
+        for (const int &p: prime) {
+            for (int j = p; j <= sz; j += p) {
+                res[j].push_back(p);
+            }
+        }
+        return res;
+    }
+
+    /*
+     * 简单的extgcd
+     */
     void ext_gcd(ll a, ll b, ll &d, ll &x, ll &y) {
         if (b) {
             ext_gcd(b, a % b, d, y, x);
@@ -426,7 +525,10 @@ struct Factor {
         }
     }
 
-    // x=a[i](mod m[i]), 0 base
+    /*
+     * 中国剩余定理
+     * x=a[i](mod m[i]), 0 base
+     * */
     ll crt(int n, ll *a, ll *m) {
         ll M = 1, d, y, x = 0, w;
         for (int i = 0; i < n; ++i) {
@@ -440,6 +542,9 @@ struct Factor {
         return (x + mod) % mod;
     }
 
+    /*
+     * 模意义下二次剩余,sqrt(n)
+     */
     ll tonelli_shanks(ll n, ll p = (ll) 1e9 + 9) {//sqrt(n)
         if (p == 2)
             return (n & 1) ? 1 : -1;
@@ -461,9 +566,11 @@ struct Factor {
         return r;
     }
 
+    /*
+     * 计算miu的前缀和，复杂性n^(3/4),能跑2e9,calphi类似，计算前要调用gen_sum函数
+     */
     vector<ll> sum_miu;
     map<ll, ll> sum_miu_mp;
-
     ll cal_sum_miu(ll x) {
         if (x <= sz) {
             return sum_miu[x];
@@ -495,6 +602,4 @@ struct Factor {
         }
     }
 
-
-
-} nt;
+} hlsnb;
