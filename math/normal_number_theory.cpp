@@ -378,7 +378,7 @@ struct number_theory {
     }
 
     // x=a[i](mod m[i]), 0 base
-    ll china(int n, ll *a, ll *m) {
+    ll crt(int n, ll *a, ll *m) {
         ll M = 1, d, y, x = 0, w;
         rep(i, 0, n) {
             M *= m[i];
