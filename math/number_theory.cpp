@@ -1,13 +1,20 @@
 struct number_theory {
+    typedef long long ll;
+    const ll mod=(ll)1e9 + 7;
     int p, sz;
     vector<bool> is_prime;
     vector<int> prime, phi, miu, pi;
 
-    number_theory(int n = 1000000) : sz(n) {
+    number_theory(int n = (int) 5e6 + 5) : sz(n) {
         sieve();
     }
 
     int sieve() {
+        static bool f = false;
+        if (f) {
+            return p;
+        }
+        f = true;
         is_prime.assign(sz + 1, false);
         pi.resize(sz + 1, 0);
         for (int i = 1; i <= sz; ++i) {
@@ -34,6 +41,11 @@ struct number_theory {
     }
 
     void gen_phi() {
+        static bool f = false;
+        if (f) {
+            return;
+        }
+        f = true;
         int p = 0;
         phi.resize(sz + 1, 0);
         phi[1] = 1;
@@ -55,6 +67,11 @@ struct number_theory {
     }
 
     void gen_miu() {
+        static bool f = false;
+        if (f) {
+            return;
+        }
+        f = true;
         int p = 0;
         miu.assign(sz + 1, 0);
         miu[1] = 1;
@@ -76,10 +93,16 @@ struct number_theory {
     }
 
     void gen_phi_miu() {
+        static bool f = false;
+        if (f) {
+            return;
+        }
+        f = true;
         phi.assign(sz + 1, 0);
         miu.assign(sz + 1, 0);
         int p = 0;
         phi[1] = 1;
+        miu[1] = 1;
         for (int i = 2; i <= sz; i++) {
             if (is_prime[i]) {
                 p++;
@@ -110,7 +133,7 @@ struct number_theory {
             }
         }
         if (x != 1) {
-            res.pb(x);
+            res.push_back(x);
         }
         return res;
     }
@@ -158,7 +181,7 @@ struct number_theory {
         return x >= 2;
     }
 
-    inline ll mul(ll a, ll b, ll p) const {
+    inline ll mull(ll a, ll b, ll p) const {
         if (p <= 1000000000) {
             return a * b % p;
         } else if (p <= 1000000000000ll) {
@@ -184,8 +207,8 @@ struct number_theory {
     ll powl(ll a, ll b, ll p) {
         ll ans = 1;
         for (; b; b >>= 1) {
-            if (b & 1) ans = mul(ans, a, p);
-            a = mul(a, a, p);
+            if (b & 1) ans = mull(ans, a, p);
+            a = mull(a, a, p);
         }
         return ans;
     }
@@ -198,7 +221,7 @@ struct number_theory {
         }
         ll x = powl(a, u, n), _x = 0;
         for (; t; t--) {
-            _x = mul(x, x, n);
+            _x = mull(x, x, n);
             if (_x == 1 && x != 1 && x != n - 1) return 1;
             x = _x;
         }
@@ -256,14 +279,14 @@ struct number_theory {
             ll X = rand() % n, Y, Z, T = 1, *lY = a, *lX = lY;
             int tmp = 20;
             int C = rand() % 10 + 3;
-            X = mul(X, X, n) + C;
+            X = mull(X, X, n) + C;
             *(lY++) = X;
             lX++;
-            Y = mul(X, X, n) + C;
+            Y = mull(X, X, n) + C;
             *(lY++) = Y;
             for (; X != Y;) {
                 ll t = X - Y + n;
-                Z = mul(T, t, n);
+                Z = mull(T, t, n);
                 if (Z == 0) {
                     return gcd(T, n);
                 }
@@ -276,8 +299,8 @@ struct number_theory {
                     }
                 }
                 T = Z;
-                Y = *(lY++) = mul(Y, Y, n) + C;
-                Y = *(lY++) = mul(Y, Y, n) + C;
+                Y = *(lY++) = mull(Y, Y, n) + C;
+                Y = *(lY++) = mull(Y, Y, n) + C;
                 X = *(lX++);
             }
         }
@@ -289,15 +312,15 @@ struct number_theory {
         for (ll &ft: fac) {
             if (n % ft == 0) {
                 n /= ft;
-                fac.pb(ft);
+                fac.push_back(ft);
             }
         }
         if (n <= sz) {
-            for (; n != 1; n /= pi[n]) fac.pb(pi[n]);
+            for (; n != 1; n /= pi[n]) fac.push_back(pi[n]);
             return;
         }
         if (miller(n)) {
-            fac.pb(n);
+            fac.push_back(n);
         } else {
             ll x = rho(n);
             _factor(x);
@@ -380,10 +403,10 @@ struct number_theory {
     // x=a[i](mod m[i]), 0 base
     ll crt(int n, ll *a, ll *m) {
         ll M = 1, d, y, x = 0, w;
-        rep(i, 0, n) {
+        for (int i = 0; i < n; ++i) {
             M *= m[i];
         }
-        rep(i, 0, n) {
+        for (int i = 0; i < n; ++i) {
             w = M / m[i];
             ext_gcd(m[i], w, d, d, y);
             x = (x + y * w * a[i]) % mod;
@@ -391,7 +414,7 @@ struct number_theory {
         return (x + mod) % mod;
     }
 
-    ll tonelli_shanks(ll n, ll p = ::mod) {//sqrt(n)
+    ll tonelli_shanks(ll n, ll p = (ll)1e9 + 9) {//sqrt(n)
         if (p == 2)
             return (n & 1) ? 1 : -1;
         if (powl(n, p >> 1, p) != 1)
@@ -411,4 +434,39 @@ struct number_theory {
         }
         return r;
     }
+
+    vector<ll> sum_miu;
+    map<ll, ll> sum_miu_mp;
+
+    ll cal_sum_miu(ll x) {
+        if (x <= sz) {
+            return sum_miu[x];
+        }
+        if (sum_miu_mp.find(x) != sum_miu_mp.end()) {
+            return sum_miu_mp[x];
+        }
+        ll ans = 1;
+        for (ll i = 2, j; i <= x; i = j + 1) {
+            j = x / (x / i), ans -= (j - i + 1) * cal_sum_miu(x / i);
+        }
+        return sum_miu_mp[x] = ans;
+    }
+
+    ll cal_sum_phi(ll x) {
+        ll ans = 0;
+        for (ll i = 1, j; i <= x; i = j + 1) {
+            j = x / (x / i), ans += (x / i) * (x / i) * (cal_sum_miu(j) - cal_sum_miu(i - 1));
+        }
+        return ((ans - 1) >> 1) + 1;
+    }
+
+    void gen_sum() { // sz = 5000000
+        gen_miu();
+        sum_miu.resize(sz + 1);
+        sum_miu[0] = miu[0];
+        for (int i = 1; i <= sz; ++i) {
+            sum_miu[i] = sum_miu[i - 1] + miu[i];
+        }
+    }
+
 } nt;
