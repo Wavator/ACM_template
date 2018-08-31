@@ -1,4 +1,4 @@
-struct number_theory {
+struct Factor {
     typedef long long ll;
     const ll mod = (ll) 1e9 + 7;
     int p, sz;
@@ -495,26 +495,6 @@ struct number_theory {
         }
     }
 
-    vector<int> const_power_head, const_init_power;
-    unsigned power_block = 100000;
-    void gen_const_power(ll val) {
-        const_power_head.resize(power_block + 2);
-        const_init_power.resize(power_block + 2);
-        const_init_power[0] = 1;
-        for (int i = 1; i <= power_block; ++i) {
-            const_init_power[i] = (ll)const_init_power[i - 1] * val % mod;
-        }
-        const_power_head[0] = 1;
-        for (int i = 1; i <= power_block; ++i) {
-            const_power_head[i] = (ll)const_power_head[i - 1] * const_init_power[power_block] % mod;
-        }
-    }
 
-    inline int get_const_power(ll x) { // val ^ x
-        if (x >= mod - 1) {
-            x %= mod - 1;// x %= euler_phi(mod);
-        }
-        return (ll)const_power_head[x / power_block] * const_init_power[x % power_block] % mod;
-    }
 
 } nt;
