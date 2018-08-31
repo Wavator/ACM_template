@@ -44,7 +44,7 @@ struct Comb {
 struct combsqr {
     vector<vector<int>> C;
     int n;
-    combsqr(int n = 3000):n(n) {
+    combsqr(int n = 3000):n(n), C(n+1, vector<int>(n+1,0)) {
         C[0][0] = 1;
         for(int i=1;i<=n;++i) {
             C[i][0]=C[i][i]=1;
