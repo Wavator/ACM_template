@@ -1,4 +1,8 @@
-#pragma optimize("-O3")
+//while (clock()<=4.9*CLOCKS_PER_SEC)
+#pragma GCC optimize("O3")
+//#pragma GCC optimize("Ofast")
+//#pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,tune=native")
+//#pragma GCC optimize("unroll-loops")
 #include <bits/stdc++.h>
 #ifndef Wavator
 #include <ext/pb_ds/assoc_container.hpp>
