@@ -1,4 +1,4 @@
-##SUSTech online judge (acm.sustc.edu.cn) 使用指北
+SUSTech online judge (acm.sustc.edu.cn) 使用指北
 
 ##真·指北
 
