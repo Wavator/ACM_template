@@ -35,7 +35,7 @@ namespace Quick_in {
         for (; c > 32 || c == ' '; c = gc()) {
             s[++l] = c;
         }
-        s[l + 1] = 0;
+        s[++l] = 0;
         return l;
     }
 
@@ -45,7 +45,7 @@ namespace Quick_in {
         for (; c > 32; c = gc()) {
             s[++l] = c;
         }
-        s[l + 1] = 0;
+        s[++l] = 0;
         return l;
     }
 
