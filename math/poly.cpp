@@ -1,12 +1,12 @@
 namespace poly {
     const int mod = (int) 1e9 + 7;
 
-    inline int inc(int a, int b) {
+    inline int add(int a, int b) {
         a += b;
         return a < mod ? a : a - mod;
     }
 
-    inline int dec(int a, int b) {
+    inline int sub(int a, int b) {
         a -= b;
         return a < 0 ? a + mod : a;
     }
@@ -92,8 +92,8 @@ namespace poly {
         fb = fft::multiply_mod(fb, a, mod);
         fa.resize(n);
         for (int i = 0; i < n; i++) {
-            fa[i] = inc(fa[i], fa[i]);
-            fa[i] = dec(fa[i], fb[i]);
+            fa[i] = add(fa[i], fa[i]);
+            fa[i] = sub(fa[i], fb[i]);
         }
         return fa;
     }
@@ -110,7 +110,7 @@ namespace poly {
         fc = get_inv(fd, (n + 1) >> 1);
         fd = fft::multiply_mod(fd, fd, mod, 1);
         for (int i = 0; i < (n + 1) / 2; i++) fc[i] = 1LL * fc[i] * ((mod + 1) / 2) % mod;
-        for (int i = 0; i < n; i++) fd[i] = inc(fd[i], a[i]);
+        for (int i = 0; i < n; i++) fd[i] = add(fd[i], a[i]);
         fd = fft::multiply_mod(fd, fc, mod);
         fd.resize(n);
         return fd;
@@ -127,7 +127,7 @@ namespace poly {
         a.resize(sz + 1);
         static vector<int> Inv(sz + 1);
         Inv[1] = 1;
-        for (int i = 2; i <= sz; i++) Inv[i] = dec(mod, 1LL * Inv[mod % i] * (mod / i) % mod);
+        for (int i = 2; i <= sz; i++) Inv[i] = sub(mod, 1LL * Inv[mod % i] * (mod / i) % mod);
         for (int i = sz; i >= 1; i--) a[i] = 1LL * a[i - 1] * Inv[i] % mod;
         a[0] = 0;
         return a;
