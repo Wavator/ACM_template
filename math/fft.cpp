@@ -1,24 +1,28 @@
-#include <bits/stdc++.h>
-using namespace std;
 namespace fft {
 
-    typedef long long type;
+    typedef int type;
 
     typedef double db;
 
     struct cp {
         db x, y;
+
         cp() { x = y = 0; }
+
         cp(db x, db y) : x(x), y(y) {}
     };
 
     inline cp operator+(cp a, cp b) { return cp(a.x + b.x, a.y + b.y); }
+
     inline cp operator-(cp a, cp b) { return cp(a.x - b.x, a.y - b.y); }
+
     inline cp operator*(cp a, cp b) { return cp(a.x * b.x - a.y * b.y, a.x * b.y + a.y * b.x); }
+
     inline cp conj(cp a) { return cp(a.x, -a.y); }
 
     type base = 1;
-    vector<cp> roots = {{0, 0}, {1, 0}};
+    vector<cp> roots = {{0, 0},
+                        {1, 0}};
     vector<type> rev = {0, 1};
 
     const db PI = acosl(-1.0);
@@ -113,7 +117,7 @@ namespace fft {
             type x = (a[i] % m + m) % m;
             fa[i] = cp(x & ((1 << 15) - 1), x >> 15);
         }
-        fill(fa.begin() + a.size(), fa.begin() + sz, cp {0, 0});
+        fill(fa.begin() + a.size(), fa.begin() + sz, cp{0, 0});
         fft(fa, sz);
         if (sz > (type) fb.size()) {
             fb.resize(static_cast<unsigned long>(sz));
@@ -125,7 +129,7 @@ namespace fft {
                 type x = (b[i] % m + m) % m;
                 fb[i] = cp(x & ((1 << 15) - 1), x >> 15);
             }
-            fill(fb.begin() + b.size(), fb.begin() + sz, cp {0, 0});
+            fill(fb.begin() + b.size(), fb.begin() + sz, cp{0, 0});
             fft(fb, sz);
         }
         db ratio = 0.25 / sz;
@@ -162,8 +166,43 @@ namespace fft {
         return res;
     }
 
+    vector<type> square(vector<type> &a) {
+        return multiply(a, a);
+    }
+
     vector<type> square_mod(vector<type> &a, type m) {
         return multiply_mod(a, a, m, 1);
     }
 
+    vector<type> kiss_me(vector<type>&b, long long k, type mod) {
+        vector<type> a = b;
+        vector<type> res(1, 1);
+        for (; k; k >>= 1, a = square_mod(a, mod)) {
+            if (k & 1) {
+                res = multiply_mod(res, a, mod);
+            }
+        }
+        return res;
+    }
+    
+    pair<vector<type>, vector<type> > mul2(vector<type>&b, long long k) {
+        return make_pair(kiss_me(b, k, (type)1e9 + 7), kiss_me(b, k, (type)1e9 + 9));
+    }
+    
 };
+
+vector<bool> solve(vector<int> b, int k, int md) {
+    vector<int> res(1, 1);
+    for (; k; k >>= 1, b = fft::square_mod(b, md)) {
+        if (k & 1) {
+            res = fft::multiply_mod(res, b, md);
+        }
+    }
+    vector<bool> tres(res.size() + 1, false);
+    rep(i, 0, SZ(res)) {
+        if (res[i] > 0) {
+            tres[i] = true;
+        }
+    }
+    return move(tres);
+}
