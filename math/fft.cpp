@@ -165,11 +165,5 @@ namespace fft {
     vector<type> square_mod(vector<type> &a, type m) {
         return multiply_mod(a, a, m, 1);
     }
-    vector<type> check(vector<type> &a, type k)
-    {
-        for(int i=0;i<(int)a.size();i++)
-            if(a[i]) a[i%k]=1;
-        a.resize(k);
-        return a;
-    }
+
 };
