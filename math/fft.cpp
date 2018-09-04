@@ -184,25 +184,17 @@ namespace fft {
         }
         return res;
     }
-    
+
     pair<vector<type>, vector<type> > mul2(vector<type>&b, long long k) {
         return make_pair(kiss_me(b, k, (type)1e9 + 7), kiss_me(b, k, (type)1e9 + 9));
     }
-    
-};
 
-vector<bool> solve(vector<int> b, int k, int md) {
-    vector<int> res(1, 1);
-    for (; k; k >>= 1, b = fft::square_mod(b, md)) {
-        if (k & 1) {
-            res = fft::multiply_mod(res, b, md);
+    vector<vector<type> > muln(vector<type>&b, long long k, vector<int> mod_list) {
+        vector< vector<type> > res(mod_list.size());
+        for (int i = 0; i < mod_list.size(); ++i) {
+            res[i] = kiss_me(b, k, mod_list[i]);
         }
+        return res;
     }
-    vector<bool> tres(res.size() + 1, false);
-    rep(i, 0, SZ(res)) {
-        if (res[i] > 0) {
-            tres[i] = true;
-        }
-    }
-    return move(tres);
-}
+
+};
