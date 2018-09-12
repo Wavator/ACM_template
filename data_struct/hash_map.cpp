@@ -12,7 +12,7 @@ struct Hash {
     }
 
     void insert(int v, int r) {
-        int k = v % mod;
+        int k = des(v, mod);
         ntot++;
         Nxt[ntot] = head[k];
         key[ntot] = v;
