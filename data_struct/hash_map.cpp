@@ -33,4 +33,4 @@ struct Hash {
 auto fun(int v, int m)->int {
     return (v % m + m) % m;
 }
-Hash<int,int,(1<<20),fun> hasher;
+Hash<int,int,38281*8,fun> hasher;
