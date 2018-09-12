@@ -66,14 +66,25 @@ public class Main {
             return next().toCharArray();
         }
         
+//         public boolean hasNext() {
+//             try {
+//                 return reader.ready();
+//             } catch(IOException e) {
+//                 throw new RuntimeException(e);
+//             }
+//         }
         public boolean hasNext() {
             try {
-                return reader.ready();
+                String string = reader.readLine();
+                if (string == null) {
+                    return false;
+                }
+                tokenizer = new StringTokenizer(string);
+                return tokenizer.hasMoreTokens();
             } catch(IOException e) {
-                throw new RuntimeException(e);
+                return false;
             }
-        }
-        
+        } 
         public BigInteger nextBigInteger() {
             return new BigInteger(next());
         }
