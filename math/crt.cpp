@@ -23,9 +23,9 @@
         for (int i = 0; i < n; ++i) {
             w = M / m[i];
             ext_gcd(m[i], w, d, d, y);
-            x = (x + y * w * a[i]) % mod;
+            x = (x + y * w * a[i]) % M;
         }
-        return (x + mod) % mod;
+        return (x + M) % M;
     }
 
     /*
