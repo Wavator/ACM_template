@@ -1,3 +1,4 @@
+typedef long long ll;
 constexpr ll mod = (ll)1e9 + 7;
 ll pow_mod(ll a, ll b) {
     ll res = 1;
@@ -12,13 +13,21 @@ struct mat {
     static const int siz = 10;
     ll a[siz][siz];
     int n, m;
-
+    
     mat(int _n, int _m) {
         n = _n, m = _m;
         for (int i = 0; i < n; i++)
             fill(a[i], a[i] + m, 0);
     }
 
+    void dig() {
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < m; ++j) {
+                a[i][j] = (i == j);
+            }
+        }
+    }
+    
     ll *operator[](const int x) {
         return a[x];
     }
@@ -48,7 +57,7 @@ struct mat {
         }
         return ret;
     }
-    
+
     mat operator*(const mat &b) const {
         mat ret(n, b.m);
         for (int i = 0; i < n; i++)
@@ -74,25 +83,29 @@ struct mat {
         return ret;
     }
 
-    ll delta() const {
+    ll delta() {
         ll res = 1;
         for (ll i = 0; i < n; i++) {
-            for (ll j = i; j < n; j++)
+            for (ll j = i; j < n; j++) {
                 if (a[j][i] != 0) {
-                    for (ll k = i; k < n; k++)
+                    for (ll k = i; k < n; k++) {
                         swap(a[i][k], a[j][k]);
-                    if (i != j)
+                    }
+                    if (i != j) {
                         res = (-res + mod) % mod;
+                    }
                     break;
                 }
+            }
             if (a[i][i] == 0) {
                 res = 0;//不存在
                 break;
             }
             for (ll j = i + 1; j < n; j++) {
                 ll mut = (a[j][i] * pow_mod(a[i][i], mod - 2)) % mod;
-                for (ll k = i; k < n; k++)
+                for (ll k = i; k < n; k++) {
                     a[j][k] = (a[j][k] - (a[i][k] * mut) % mod + mod) % mod;
+                }
             }
             res = (res * a[i][i]) % mod;
         }
@@ -107,6 +120,55 @@ struct mat {
                 a[i][j] -= g[i][j];
             }
         }
+    }
+    
+
+    ll inv(ll x) {
+        return pow_mod(x, mod - 2);
+    }
+    
+    mat get_inv() {
+        mat b(n, m);
+        b.dig();
+        for (int i = 0, j; i < n; i++) {
+            for (int k = i; k < n; k++)
+                if (a[k][i]) {
+                    j = k;
+                    break;
+                }
+            if (i != j) {
+                for (int k = 0; k < n; k++) {
+                    swap(a[i][k], a[j][k]);
+                    swap(b.a[i][k], b.a[j][k]);
+                }
+            }
+            for (j = i + 1; j < n; j++) {
+                int d = a[j][i] * inv(a[i][i]) % mod;
+                for (int k = 0; k < n; k++) {
+                    a[j][k] = (a[j][k] - a[i][k] * d) % mod;
+                    b.a[j][k] = (b.a[j][k] - b.a[i][k] * d) % mod;
+                    if (a[j][k] < 0) a[j][k] += mod;
+                    if (b.a[j][k] < 0) b.a[j][k] += mod;
+                }
+            }
+        }
+        for (int i = n - 1; i >= 0; i--) {
+            int d = inv(a[i][i]);
+            for (int k = 0; k < n; k++) {
+                a[i][k] = a[i][k] * d % mod;
+                b.a[i][k] = b.a[i][k] * d % mod;
+            }
+            for (int j = i - 1; j >= 0; j--) {
+                d = a[j][i] * inv(a[i][i]) % mod;
+                for (int k = 0; k < n; k++) {
+                    a[j][k] = (a[j][k] - a[i][k] * d) % mod;
+                    b.a[j][k] = (b.a[j][k] - b.a[i][k] * d) % mod;
+                    if (a[j][k] < 0) a[j][k] += mod;
+                    if (b.a[j][k] < 0) b.a[j][k] += mod;
+                }
+            }
+        }
+        return b;
     }
 
 };
