@@ -1,19 +1,18 @@
+template <size_t N>
 class DSU_seq {
 public:
-    vector<int> p;
+    int p[N];
     int n;
-    vector< vector<int> > seq;
+    vector<int> seq[N];
 
     DSU_seq(int n=0) : n(n) {
         init(n);
     }
 
-    void init(int n){
-        p.resize(n+1);
-        iota(p.begin(),p.end(),0);
-        seq.resize(n+1);
-        for(int i=1;i<=n++i)
-            seq[i].push_back(i);
+    void init(int n) {
+        for (int i = 1; i <= n; ++i) {
+            seq[i] = vector<int>{p[i] = i};
+        }
     }
 
     int find(int x) {
